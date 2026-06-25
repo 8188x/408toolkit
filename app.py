@@ -1,88 +1,152 @@
-"""408Toolkit - 考研实用工具集 (服务器端渲染, 无需JS)"""
-import json, hashlib, os
-from datetime import datetime
-from flask import Flask, jsonify, request, render_template, session
+"""408Toolkit - 408考研学习平台 (含用户/题库/刷题/错题/资料)"""
+import json, hashlib, os, random, re
+from flask import Flask, request, render_template, redirect, url_for, session
 
 app = Flask(__name__)
-app.secret_key = '408tk-2026'
+app.secret_key = os.urandom(24).hex()
+DB = os.path.join(os.path.dirname(__file__), 'data.json')
 
-# ============ Simple JSON database ============
-DB_FILE = os.path.join(os.path.dirname(__file__), 'data.json')
-
-def load_db():
-    if not os.path.exists(DB_FILE):
-        return init_db()
-    with open(DB_FILE, 'r') as f:
+def load():
+    with open(DB) as f:
         return json.load(f)
 
-def save_db(db):
-    with open(DB_FILE, 'w') as f:
-        json.dump(db, f, ensure_ascii=False, indent=2)
+def save(data):
+    with open(DB, 'w') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
-def init_db():
-    db = {
-        'users': [
-            {'id':1,'username':'admin','password':hashlib.sha256(b'admin123').hexdigest(),'created':'2026-01-01'}
-        ],
-        'questions': [
-            {'id':1,'topic':'ds','title':'在完全二叉树中，叶子结点数和度为2的节点数的关系是？','opts':[('A','n0=n2+1'),('B','n0=n2'),('C','n0=n2-1'),('D','n0=2n2')],'ans':'A','diff':2},
-            {'id':2,'topic':'ds','title':'快速排序最坏情况复杂度','opts':[('A','O(n)'),('B','O(nlogn)'),('C','O(n²)'),('D','O(logn)')],'ans':'C','diff':1},
-            {'id':3,'topic':'ds','title':'下列哪种遍历组合可以唯一确定二叉树','opts':[('A','先序+后序'),('B','先序+中序'),('C','中序+后序'),('D','先序+层序')],'ans':'B','diff':3},
-            {'id':4,'topic':'co','title':'Cache的主要作用是','opts':[('A','扩大容量'),('B','提高CPU速度'),('C','降低功耗'),('D','管理外设')],'ans':'B','diff':1},
-            {'id':5,'topic':'co','title':'虚拟存储器的原理基于','opts':[('A','时间局部性'),('B','空间局部性'),('C','局部性原理'),('D','顺序性')],'ans':'C','diff':2},
-            {'id':6,'topic':'co','title':'IEEE754浮点数标准中，单精度浮点数的阶码位数是','opts':[('A','8'),('B','9'),('C','10'),('D','11')],'ans':'A','diff':3},
-            {'id':7,'topic':'os','title':'TCP协议位于OSI模型的第几层','opts':[('A','3'),('B','4'),('C','5'),('D','6')],'ans':'B','diff':1},
-            {'id':8,'topic':'cn','title':'HTTP默认端口','opts':[('A','21'),('B','25'),('C','80'),('D','443')],'ans':'C','diff':1},
-            {'id':9,'topic':'cn','title':'CSMA/CD用于解决','opts':[('A','路由'),('B','拥塞'),('C','信道争用'),('D','流量控制')],'ans':'C','diff':2},
-            {'id':10,'topic':'os','title':'分页存储中逻辑-物理地址转换由谁完成','opts':[('A','CPU'),('B','MMU'),('C','OS'),('D','编译器')],'ans':'B','diff':2},
-        ],
-        'topics': {
-            'ds': '数据结构',
-            'co': '计算机组成原理',
-            'os': '操作系统',
-            'cn': '计算机网络',
-        }
-    }
-    save_db(db)
-    return db
+def get_user():
+    uid = session.get('user_id')
+    if uid:
+        data = load()
+        for u in data.get('users', []):
+            if u['id'] == uid:
+                return u
+    return None
 
-
-# ============ Routes ============
+# ====== Pages ======
 @app.route('/')
 def index():
     return render_template('index.html')
 
 @app.route('/questions')
 def questions():
-    db = load_db()
-    qs = db['questions']
-    topic = request.args.get('topic', '')
-    if topic:
-        qs = [q for q in qs if q['topic'] == topic]
-    topics = db['topics']
-    return render_template('questions.html', questions=qs, topics=topics, selected=topic)
+    data = load()
+    qs = data['questions']
+    sub = request.args.get('sub', '')
+    q = request.args.get('q', '')
+    if sub: qs = [x for x in qs if x['sub'] == sub]
+    if q: qs = [x for x in qs if q.lower() in x['q'].lower()]
+    return render_template('questions.html', questions=qs, subjects=data['subjects'], sel=sub, sq=q)
 
 @app.route('/quiz')
 def quiz():
-    db = load_db()
-    qs = db['questions']
-    # Shuffle by importing random
-    import random
+    data = load()
+    qs = list(data['questions'])
+    sub = request.args.get('sub', '')
+    if sub: qs = [x for x in qs if x['sub'] == sub]
     random.shuffle(qs)
-    return render_template('quiz.html', questions=qs[:10], topics=db['topics'])
+    return render_template('quiz.html', questions=qs, subjects=data['subjects'], sel=sub)
 
-@app.route('/codes')
-def codes():
-    return render_template('codes.html')
+@app.route('/code')
+def code():
+    data = load()
+    cs = data['codes']
+    sub = request.args.get('sub', '')
+    if sub: cs = [x for x in cs if x['sub'] == sub]
+    return render_template('code.html', codes=cs, subjects=data['subjects'], sel=sub)
 
-@app.route('/about')
-def about():
-    return render_template('about.html')
+@app.route('/materials')
+def materials():
+    data = load()
+    return render_template('materials.html', materials=data['materials'], subjects=data['subjects'])
+
+@app.route('/wrong')
+def wrong():
+    data = load()
+    user = get_user()
+    wrong_ids = user.get('wrong', []) if user else []
+    wrong_qs = [q for q in data['questions'] if q['id'] in wrong_ids]
+    return render_template('wrong.html', wrong=wrong_qs, subjects=data['subjects'])
+
+# ====== Auth ======
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        data = load()
+        uname = request.form.get('username', '')
+        pwd = hashlib.sha256(request.form.get('password', '').encode()).hexdigest()
+        for u in data.get('users', []):
+            if u['username'] == uname and u.get('pass') == pwd:
+                session['user_id'] = u['id']
+                return redirect(url_for('index'))
+        return render_template('login.html', error='用户名或密码错误')
+    return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        data = load()
+        uname = request.form.get('username', '')
+        pwd = hashlib.sha256(request.form.get('password', '').encode()).hexdigest()
+        if any(u['username'] == uname for u in data.get('users', [])):
+            return render_template('register.html', error='用户名已存在')
+        uid = max((u['id'] for u in data.get('users', [])), default=0) + 1
+        phone = request.form.get('phone', ''); email = request.form.get('email', '')
+        data.setdefault('users', []).append({'id': uid, 'username': uname, 'pass': pwd, 'phone': phone, 'email': email, 'wrong': []})
+        save(data)
+        session['user_id'] = uid
+        return redirect(url_for('index'))
+    return render_template('register.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    return redirect(url_for('index'))
+
+# ====== API ======
+@app.route('/api/wrong/add', methods=['POST'])
+def api_wrong_add():
+    user = get_user()
+    if not user: return '{}', 200
+    data = load()
+    qid = request.json.get('qid')
+    for u in data['users']:
+        if u['id'] == user['id']:
+            if qid not in u['wrong']:
+                u['wrong'].append(qid)
+            break
+    save(data)
+    return '{"ok":true}', 200
 
 
-@app.route('/api/check')
-def api_check():
-    return '{"status":"ok"}'
+@app.route('/forgot', methods=['GET', 'POST'])
+def forgot():
+    data = load()
+    if request.method == 'POST':
+        step = request.form.get('step', '')
+        if step == 'lookup':
+            uname = request.form.get('username', '')
+            for u in data.get('users', []):
+                if u['username'] == uname:
+                    return render_template('forgot.html', step='verify', uid=u['id'], uname=u['username'], email=u.get('email',''), phone=u.get('phone',''))
+            return render_template('forgot.html', error='用户名不存在')
+        elif step == 'do_verify':
+            uid = int(request.form.get('uid', 0))
+            verify = request.form.get('verify', '').strip()
+            for u in data.get('users', []):
+                if u['id'] == uid and (verify == u.get('email','') or verify == u.get('phone','')):
+                    return render_template('forgot.html', step='reset', uid=uid)
+            return render_template('forgot.html', error='验证信息不匹配', step='verify', uid=uid, uname=u.get('username',''), email=u.get('email',''), phone=u.get('phone',''))
+        elif step == 'do_reset':
+            uid = int(request.form.get('uid', 0))
+            pwd = hashlib.sha256(request.form.get('password', '').encode()).hexdigest()
+            for u in data.get('users', []):
+                if u['id'] == uid:
+                    u['pass'] = pwd
+                    break
+            save(data)
+            return render_template('forgot.html', done=True)
+    return render_template('forgot.html')
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5010, debug=True)
+    app.run(host='127.0.0.1', port=5010)

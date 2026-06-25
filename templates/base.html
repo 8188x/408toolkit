@@ -1,46 +1,41 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{% block title %}408Toolkit{% endblock %}</title>
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>{% block title %}408Kit{% endblock %}</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  background: #f0f2f5; color: #1a1a2e; line-height: 1.6;
-}
-.hd {
-  background: linear-gradient(135deg, #1a2744, #2c3e7a); color: #fff;
-  padding: 0 24px; position: sticky; top: 0; z-index: 100;
-}
-.hi { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 56px; }
-.lg { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px; }
-.lg em { font-style: normal; color: #ffd700; }
-.nv { display: flex; gap: 4px; }
-.nv a {
-  padding: 6px 16px; border-radius: 6px; text-decoration: none; color: rgba(255,255,255,.7);
-  font-size: .82rem; font-weight: 500; transition: all .15s;
-}
-.nv a:hover { background: rgba(255,255,255,.1); color: #fff; }
-.nv a.act { background: rgba(255,255,255,.15); color: #fff; font-weight: 600; }
-.mn { max-width: 1100px; margin: 0 auto; padding: 24px; min-height: calc(100vh - 120px); }
-.ft { text-align: center; padding: 20px; font-size: .75rem; color: #8896b8; border-top: 1px solid #e2e5ee; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:#f0f2f5;color:#1a1a2e;line-height:1.6}
+.hd{background:linear-gradient(135deg,#1a2744,#2c3e7a);color:#fff;padding:0 20px;position:sticky;top:0;z-index:100}
+.hi{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:54px}
+.lg{font-size:1.1rem;font-weight:800;text-decoration:none;color:#fff}
+.lg em{font-style:normal;color:#ffd700}
+.nv{display:flex;gap:2px;align-items:center}
+.nv a,.nv button{padding:5px 12px;border-radius:5px;text-decoration:none;color:rgba(255,255,255,.7);font-size:.76rem;font-weight:500;transition:all .1s;border:none;background:transparent;cursor:pointer}
+.nv a:hover,.nv button:hover{background:rgba(255,255,255,.1);color:#fff}
+.nv a.act{background:rgba(255,255,255,.15);color:#fff;font-weight:600}
+.mn{max-width:1100px;margin:0 auto;padding:20px;min-height:calc(100vh-120px)}
+.ft{text-align:center;padding:18px;font-size:.7rem;color:#8896b8;border-top:1px solid #e2e5ee}
+.cd{background:#fff;border-radius:10px;padding:18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.ct{font-size:.85rem;font-weight:700;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #eef0f5;display:flex;justify-content:space-between}
+.fb{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.fb select,.fb input{padding:5px 10px;border:1px solid #d0d8e8;border-radius:5px;font-size:.78rem}
+.btn{padding:5px 14px;border-radius:5px;border:none;cursor:pointer;font-size:.75rem;font-weight:500}
+.btn-p{background:#2c3e7a;color:#fff}.btn-p:hover{background:#1a2744}
+.btn-g{background:#eef0f5;color:#5a6a8a;border:1px solid #d0d8e8}.btn-g:hover{background:#e2e5ee}
+.tg{display:inline-block;padding:2px 10px;border-radius:10px;font-size:.65rem;color:#fff;margin:2px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:700px){.g2{grid-template-columns:1fr}}
 </style>
-{% block head %}{% endblock %}
-</head>
-<body>
-<div class="hd"><div class="hi">
-  <div class="lg"><em>408</em>Toolkit</div>
-  <div class="nv">
-    <a href="/" class="{% if request.path == '/' %}act{% endif %}">首页</a>
-    <a href="/questions" class="{% if request.path in ['/questions','/quiz'] %}act{% endif %}">题库</a>
-    <a href="/quiz" class="{% if request.path == '/quiz' %}act{% endif %}">刷题</a>
-    <a href="/codes" class="{% if request.path == '/codes' %}act{% endif %}">代码</a>
-    <a href="/about" class="{% if request.path == '/about' %}act{% endif %}">关于</a>
-  </div>
-</div></div>
+{% block head %}{% endblock %}</head>
+<body><div class="hd"><div class="hi">
+<a href="/" class="lg"><em>408</em>Kit</a>
+<div class="nv">
+<a href="/" class="{% if request.path=='/' %}act{% endif %}">首页</a>
+<a href="/questions" class="{% if '/questions' in request.path %}act{% endif %}">题库</a>
+<a href="/quiz" class="{% if '/quiz' in request.path %}act{% endif %}">刷题</a>
+<a href="/code" class="{% if '/code' in request.path %}act{% endif %}">代码</a>
+<a href="/materials" class="{% if '/materials' in request.path %}act{% endif %}">资料</a>
+<a href="/wrong" class="{% if '/wrong' in request.path %}act{% endif %}">错题</a>
+{% if session.get('user') %}<span style="font-size:.72rem;color:rgba(255,255,255,.5)">{{ session.user.username }}</span><a href="/logout">退出</a>
+{% else %}<a href="/login">登录</a>{% endif %}
+</div></div></div>
 <main class="mn">{% block content %}{% endblock %}</main>
-<div class="ft">408Toolkit · 085404 计算机技术 · Python/Flask</div>
-</body>
-</html>
+<div class="ft">408Kit · 408考研学习平台 · 开源</div></body></html>

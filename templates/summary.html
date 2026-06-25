@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}知识点速查{% endblock %}
+{% block content %}
+<style>
+.tc{margin-bottom:8px}.tc .tl{font-size:.9rem;font-weight:700;margin-bottom:8px;padding-left:10px;border-left:3px solid}.tc ul{padding-left:20px}.tc ul li{font-size:.82rem;color:#3a3a5a;margin-bottom:4px;line-height:1.5}
+</style>
+<h2 style="font-size:1rem;margin-bottom:16px">408 知识点速查</h2>
+
+<div class="g2 gr">
+{% for k,v in subjects.items() %}
+<div class="cd tc">
+  <div class="tl" style="border-color:{{ v.color }};color:{{ v.color }}">{{ v.name }}</div>
+  <ul>{% for t in v.topics %}<li>{{ t }}</li>{% endfor %}</ul>
+</div>
+{% endfor %}
+</div>
+
+<div class="cd">
+  <div class="ct">408 考试结构</div>
+  <table style="width:100%;border-collapse:collapse;font-size:.82rem">
+    <tr style="background:#f5f6fa"><th style="padding:8px;text-align:left;border-bottom:1px solid #eef0f5">科目</th><th style="padding:8px;text-align:left;border-bottom:1px solid #eef0f5">分值</th><th style="padding:8px;text-align:left;border-bottom:1px solid #eef0f5">题型</th></tr>
+    <tr><td style="padding:8px;border-bottom:1px solid #f5f6fa">数据结构</td><td style="padding:8px;border-bottom:1px solid #f5f6fa">45分</td><td style="padding:8px;border-bottom:1px solid #f5f6fa">选择+大题</td></tr>
+    <tr><td style="padding:8px;border-bottom:1px solid #f5f6fa">计算机组成原理</td><td style="padding:8px;border-bottom:1px solid #f5f6fa">45分</td><td style="padding:8px;border-bottom:1px solid #f5f6fa">选择+大题</td></tr>
+    <tr><td style="padding:8px;border-bottom:1px solid #f5f6fa">操作系统</td><td style="padding:8px;border-bottom:1px solid #f5f6fa">35分</td><td style="padding:8px;border-bottom:1px solid #f5f6fa">选择+大题</td></tr>
+    <tr><td style="padding:8px">计算机网络</td><td style="padding:8px">25分</td><td style="padding:8px">选择+大题</td></tr>
+  </table>
+</div>
+{% endblock %}

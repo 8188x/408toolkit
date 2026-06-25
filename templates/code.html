@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}算法代码库{% endblock %}
+{% block content %}
+<style>
+.cb{background:#1a1a2e;color:#dce0f0;border-radius:8px;padding:14px;font-family:'SF Mono','Fira Code','Consolas',monospace;font-size:.76rem;line-height:1.5;overflow-x:auto;white-space:pre;margin-top:8px}
+.cc{margin-bottom:8px}.cc .meta{font-size:.75rem;color:#8896b8;margin-bottom:6px}.cc .c{font-size:.88rem;font-weight:600}.cc .kw{color:#4a7cfa}.cc .fn{color:#ffd700}.cc .cm{color:#7a84b0}.cc .str{color:#4ad4a0}
+.cat{margin:16px 0 8px;font-size:.85rem;font-weight:700;color:#2c3e7a}
+</style>
+<div class="fb">
+  <form action="/code" method="get" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <select name="sub"><option value="">全部</option>{% for k,v in subjects.items() %}<option value="{{ k }}" {% if sel==k %}selected{% endif %}>{{ v.name }}</option>{% endfor %}</select>
+    <button class="btn btn-p" type="submit">筛选</button>
+    <span style="font-size:.78rem;color:#8896b8">{{ codes|length }} 个代码</span>
+  </form>
+</div>
+{% set cur='' %}
+{% for c in codes %}
+{% if c.cat != cur %}<div class="cat">{{ c.cat }}</div>{% set cur=c.cat %}{% endif %}
+<div class="cd cc">
+  <div class="ct">{{ c.title }} <span class="i2">{{ c.comp }} · {{ c.detail }}</span></div>
+  <div class="cb">{{ c.code }}</div>
+</div>
+{% else %}<div style="text-align:center;padding:40px;color:#8896b8">暂无代码</div>{% endfor %}
+{% endblock %}

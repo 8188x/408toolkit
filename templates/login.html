@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block title %}登录{% endblock %}
+{% block content %}
+<div style="max-width:400px;margin:40px auto">
+<div class="cd">
+  <div class="ct">用户登录</div>
+  <form method="post" action="/login">
+    <div style="margin-bottom:14px"><label style="font-size:.78rem;color:#5a5a7a;display:block;margin-bottom:4px">用户名</label><input name="username" style="width:100%;padding:8px 12px;border:1px solid #d0d8e8;border-radius:6px;font-size:.85rem"></div>
+    <div style="margin-bottom:14px"><label style="font-size:.78rem;color:#5a5a7a;display:block;margin-bottom:4px">密码</label><input name="password" type="password" style="width:100%;padding:8px 12px;border:1px solid #d0d8e8;border-radius:6px;font-size:.85rem"></div>
+    {% if error %}<div style="color:#e05050;font-size:.78rem;margin-bottom:10px">{{ error }}</div>{% endif %}
+    <button class="btn btn-p" style="width:100%;padding:10px;font-size:.85rem">登录</button>
+  </form>
+  <div style="margin-top:12px;text-align:center;font-size:.78rem;color:#8896b8">没有账号？<a href="/register" style="color:#2c3e7a">注册</a></div>
+</div></div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}{% block title %}找回密码{% endblock %}
+{% block content %}
+<div style="max-width:400px;margin:40px auto">
+<div class="cd">
+  <div class="ct">找回密码</div>
+
+  {% if step == 'reset' %}
+  <form method="post" action="/forgot">
+    <input type="hidden" name="step" value="do_reset">
+    <input type="hidden" name="uid" value="{{ uid }}">
+    <div style="font-size:.82rem;margin-bottom:14px">验证通过 ✅ 请设置新密码</div>
+    <div style="margin-bottom:12px"><label style="font-size:.78rem;color:#5a5a7a;display:block;margin-bottom:4px">新密码</label><input name="password" type="password" style="width:100%;padding:8px 12px;border:1px solid #d0d8e8;border-radius:6px;font-size:.85rem" required></div>
+    <button class="btn btn-p" style="width:100%;padding:10px;font-size:.85rem">重置密码</button>
+  </form>
+
+  {% elif step == 'verify' %}
+  <form method="post" action="/forgot">
+    <input type="hidden" name="step" value="do_verify">
+    <input type="hidden" name="uid" value="{{ uid }}">
+    <div style="font-size:.82rem;margin-bottom:8px">用户 <b>{{ uname }}</b> 的验证信息：</div>
+    <div style="padding:10px;background:#f5f6fa;border-radius:6px;font-size:.78rem;margin-bottom:12px;color:#5a5a7a">
+      {% if email %}<div>邮箱: {{ email }}</div>{% endif %}
+      {% if phone %}<div>手机: {{ phone }}</div>{% endif %}
+      <div style="margin-top:6px;color:#8896b8">输入以上任一信息验证身份</div>
+    </div>
+    <div style="margin-bottom:12px"><label style="font-size:.78rem;color:#5a5a7a;display:block;margin-bottom:4px">输入邮箱或手机号验证</label><input name="verify" style="width:100%;padding:8px 12px;border:1px solid #d0d8e8;border-radius:6px;font-size:.85rem" required></div>
+    {% if error %}<div style="color:#e05050;font-size:.78rem;margin-bottom:10px">{{ error }}</div>{% endif %}
+    <button class="btn btn-p" style="width:100%;padding:10px;font-size:.85rem">验证</button>
+  </form>
+
+  {% elif done %}
+  <div style="text-align:center;padding:10px">
+    <div style="font-size:1rem;margin-bottom:8px">✅ 密码已重置</div>
+    <a href="/login" class="btn btn-p" style="display:inline-block;margin-top:8px">去登录</a>
+  </div>
+
+  {% else %}
+  <form method="post" action="/forgot">
+    <input type="hidden" name="step" value="lookup">
+    <div style="margin-bottom:14px"><label style="font-size:.78rem;color:#5a5a7a;display:block;margin-bottom:4px">输入用户名</label><input name="username" style="width:100%;padding:8px 12px;border:1px solid #d0d8e8;border-radius:6px;font-size:.85rem" required></div>
+    {% if error %}<div style="color:#e05050;font-size:.78rem;margin-bottom:10px">{{ error }}</div>{% endif %}
+    <button class="btn btn-p" style="width:100%;padding:10px;font-size:.85rem">下一步</button>
+  </form>
+  <div style="margin-top:12px;text-align:center;font-size:.78rem;color:#8896b8"><a href="/register" style="color:#2c3e7a">注册新账号</a></div>
+  {% endif %}
+
+</div></div>
+{% endblock %}

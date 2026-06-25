@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block title %}复习资料{% endblock %}
+{% block content %}
+<style>
+.mc{margin-bottom:8px}.mc .mt{font-size:.82rem;font-weight:600;color:#2c3e7a;margin-bottom:4px}.mc .mc2{font-size:.8rem;color:#3a3a5a;padding:6px 10px;background:#f8f9fe;border-radius:6px;border-left:3px solid}
+</style>
+<h2 style="font-size:1rem;margin-bottom:14px">408 复习资料</h2>
+{% for sk,sv in subjects.items() %}
+<div class="cd">
+  <div class="ct" style="color:{{ sv.color }}">{{ sv.name }}</div>
+  {% for m in materials[sk] %}
+  <div class="mc">
+    <div class="mt">{{ m.t }}</div>
+    <div class="mc2" style="border-color:{{ sv.color }}">{{ m.c }}</div>
+  </div>
+  {% endfor %}
+</div>
+{% endfor %}
+{% endblock %}
