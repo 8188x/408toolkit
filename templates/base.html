@@ -1,31 +1,128 @@
-<!DOCTYPE html><html lang="zh-CN"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>{% block title %}408Kit{% endblock %}</title>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>{% block title %}408Toolkit{% endblock %}</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:#f0f2f5;color:#1a1a2e;line-height:1.6}
-.hd{background:linear-gradient(135deg,#1a2744,#2c3e7a);color:#fff;padding:0 20px;position:sticky;top:0;z-index:100}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+  background:#0b0e17;color:#dce0f0;line-height:1.6;overflow-x:hidden
+}
+/* Particle canvas background */
+#particle-canvas{
+  position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;
+  pointer-events:none;opacity:.6
+}
+/* Content layers */
+.hd,.mn,.ft{position:relative;z-index:1}
+
+/* Header with glass effect */
+.hd{
+  background:rgba(11,14,23,.85);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(74,124,250,.15);padding:0 20px;
+  position:sticky;top:0;z-index:100
+}
 .hi{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:54px}
-.lg{font-size:1.1rem;font-weight:800;text-decoration:none;color:#fff}
-.lg em{font-style:normal;color:#ffd700}
+.lg{font-size:1.1rem;font-weight:800;text-decoration:none;color:#fff;letter-spacing:-.5px}
+.lg em{font-style:normal;color:#4a7cfa;text-shadow:0 0 20px rgba(74,124,250,.3)}
 .nv{display:flex;gap:2px;align-items:center}
-.nv a,.nv button{padding:5px 12px;border-radius:5px;text-decoration:none;color:rgba(255,255,255,.7);font-size:.76rem;font-weight:500;transition:all .1s;border:none;background:transparent;cursor:pointer}
-.nv a:hover,.nv button:hover{background:rgba(255,255,255,.1);color:#fff}
-.nv a.act{background:rgba(255,255,255,.15);color:#fff;font-weight:600}
+.nv a,.nv button{
+  padding:5px 14px;border-radius:6px;text-decoration:none;color:rgba(255,255,255,.6);
+  font-size:.76rem;font-weight:500;transition:all .2s;border:none;background:transparent;cursor:pointer;
+  position:relative
+}
+.nv a::after,.nv button::after{
+  content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:0;height:2px;background:#4a7cfa;transition:width .2s;border-radius:1px
+}
+.nv a:hover::after,.nv button:hover::after{width:60%}
+.nv a:hover,.nv button:hover{color:#fff}
+.nv a.act{color:#fff;font-weight:600}
+.nv a.act::after{width:60%;box-shadow:0 0 8px rgba(74,124,250,.4)}
+
+/* Main content */
 .mn{max-width:1100px;margin:0 auto;padding:20px;min-height:calc(100vh-120px)}
-.ft{text-align:center;padding:18px;font-size:.7rem;color:#8896b8;border-top:1px solid #e2e5ee}
-.cd{background:#fff;border-radius:10px;padding:18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.ct{font-size:.85rem;font-weight:700;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #eef0f5;display:flex;justify-content:space-between}
-.fb{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
-.fb select,.fb input{padding:5px 10px;border:1px solid #d0d8e8;border-radius:5px;font-size:.78rem}
-.btn{padding:5px 14px;border-radius:5px;border:none;cursor:pointer;font-size:.75rem;font-weight:500}
-.btn-p{background:#2c3e7a;color:#fff}.btn-p:hover{background:#1a2744}
-.btn-g{background:#eef0f5;color:#5a6a8a;border:1px solid #d0d8e8}.btn-g:hover{background:#e2e5ee}
+.ft{text-align:center;padding:18px;font-size:.7rem;color:rgba(255,255,255,.25);border-top:1px solid rgba(74,124,250,.08);z-index:1;position:relative}
+
+/* Glowing card */
+.cd{
+  background:rgba(17,22,43,.8);backdrop-filter:blur(10px);
+  border:1px solid rgba(74,124,250,.12);border-radius:12px;
+  padding:18px;margin-bottom:14px;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  position:relative;overflow:hidden
+}
+.cd::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(74,124,250,.05),transparent);
+  transition:left .6s
+}
+.cd:hover::before{left:100%}
+.cd:hover{
+  border-color:rgba(74,124,250,.25);transform:translateY(-2px);
+  box-shadow:0 8px 30px rgba(74,124,250,.1)
+}
+
+.ct{
+  font-size:.85rem;font-weight:700;margin-bottom:10px;
+  padding-bottom:8px;border-bottom:1px solid rgba(74,124,250,.1);
+  display:flex;justify-content:space-between;color:#dce0f0
+}
+.ct .i2{font-size:.7rem;color:rgba(255,255,255,.35);font-weight:400}
+
+/* Glass filter bar */
+.fb{
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;
+  padding:10px 14px;background:rgba(17,22,43,.6);border-radius:10px;
+  border:1px solid rgba(74,124,250,.08);backdrop-filter:blur(10px)
+}
+.fb select,.fb input{
+  padding:5px 10px;background:rgba(11,14,23,.6);border:1px solid rgba(74,124,250,.15);
+  border-radius:6px;color:#dce0f0;font-size:.78rem;transition:border-color .2s
+}
+.fb select:focus,.fb input:focus{outline:none;border-color:#4a7cfa;box-shadow:0 0 12px rgba(74,124,250,.15)}
+
+/* Glowing buttons */
+.btn{
+  padding:5px 14px;border-radius:6px;border:none;cursor:pointer;
+  font-size:.75rem;font-weight:500;transition:all .2s;position:relative;overflow:hidden
+}
+.btn::after{
+  content:'';position:absolute;top:50%;left:50%;width:0;height:0;
+  background:rgba(255,255,255,.1);border-radius:50%;transform:translate(-50%,-50%);transition:all .4s
+}
+.btn:active::after{width:200px;height:200px}
+.btn-p{background:#4a7cfa;color:#fff;box-shadow:0 4px 15px rgba(74,124,250,.2)}
+.btn-p:hover{background:#5a8aff;transform:translateY(-1px);box-shadow:0 6px 20px rgba(74,124,250,.3)}
+.btn-g{background:rgba(74,124,250,.1);color:rgba(255,255,255,.7);border:1px solid rgba(74,124,250,.15)}
+.btn-g:hover{background:rgba(74,124,250,.2);color:#fff}
+
+/* Tags */
 .tg{display:inline-block;padding:2px 10px;border-radius:10px;font-size:.65rem;color:#fff;margin:2px}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.anim{animation:fadeUp .5s ease forwards}
+.anim-d1{animation-delay:.1s}.anim-d2{animation-delay:.2s}.anim-d3{animation-delay:.3s}
+
+/* Grid */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:700px){.g2{grid-template-columns:1fr}}
+
+/* Particles styling (legacy support) */
+.tg{background:#4a7cfa}
+.tg[style*="f09a4a"]{background:#f09a4a}
+.tg[style*="4ad4a0"]{background:#4ad4a0}
+.tg[style*="b07ad4"]{background:#b07ad4}
 </style>
 {% block head %}{% endblock %}</head>
-<body><div class="hd"><div class="hi">
+<body>
+
+<!-- Particle Canvas -->
+<canvas id="particle-canvas"></canvas>
+
+<div class="hd"><div class="hi">
 <a href="/" class="lg"><em>408</em>Kit</a>
 <div class="nv">
 <a href="/" class="{% if request.path=='/' %}act{% endif %}">首页</a>
@@ -34,8 +131,99 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 <a href="/code" class="{% if '/code' in request.path %}act{% endif %}">代码</a>
 <a href="/materials" class="{% if '/materials' in request.path %}act{% endif %}">资料</a>
 <a href="/wrong" class="{% if '/wrong' in request.path %}act{% endif %}">错题</a>
-{% if session.get('user') %}<span style="font-size:.72rem;color:rgba(255,255,255,.5)">{{ session.user.username }}</span><a href="/logout">退出</a>
+{% if session.get('user') %}
+<span style="font-size:.72rem;color:rgba(255,255,255,.35)">{{ session.user.username }}</span>
+<a href="/logout">退出</a>
 {% else %}<a href="/login">登录</a>{% endif %}
 </div></div></div>
+
 <main class="mn">{% block content %}{% endblock %}</main>
-<div class="ft">408Kit · 408考研学习平台 · 开源</div></body></html>
+<div class="ft">408Toolkit · 考研学习平台 · 开源 · 085404</div>
+
+<!-- Particle System -->
+<script>
+(function(){
+  var c = document.getElementById('particle-canvas');
+  var ctx = c.getContext('2d');
+  var particles = [];
+  var W, H;
+  var mouse = {x:null, y:null};
+
+  function resize(){
+    W = c.width = window.innerWidth;
+    H = c.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+
+  // Particles
+  var count = Math.min(80, Math.floor(W * H / 12000));
+  for(var i=0; i<count; i++){
+    particles.push({
+      x: Math.random() * (W || 1200),
+      y: Math.random() * (H || 800),
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
+      r: Math.random() * 2 + 1
+    });
+  }
+
+  document.addEventListener('mousemove', function(e){
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+  document.addEventListener('mouseleave', function(){
+    mouse.x = null; mouse.y = null;
+  });
+
+  function animate(){
+    ctx.clearRect(0, 0, W, H);
+    for(var i=0; i<particles.length; i++){
+      var p = particles[i];
+      // Mouse interaction
+      if(mouse.x !== null){
+        var dx = mouse.x - p.x;
+        var dy = mouse.y - p.y;
+        var dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < 150){
+          p.vx -= dx / dist * 0.02;
+          p.vy -= dy / dist * 0.02;
+        }
+      }
+      // Move
+      p.x += p.vx;
+      p.y += p.vy;
+      // Damping
+      p.vx *= 0.98; p.vy *= 0.98;
+      // Wrap
+      if(p.x < 0) p.x = W;
+      if(p.x > W) p.x = 0;
+      if(p.y < 0) p.y = H;
+      if(p.y > H) p.y = 0;
+      // Draw
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(74,124,250,' + (0.3 + p.r/6) + ')';
+      ctx.fill();
+      // Lines between nearby particles
+      for(var j=i+1; j<particles.length; j++){
+        var p2 = particles[j];
+        var dx = p.x - p2.x;
+        var dy = p.y - p2.y;
+        var dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < 120){
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = 'rgba(74,124,250,' + (0.06 * (1 - dist/120)) + ')';
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+
+  resize();
+  animate();
+})();
+</script>
+</body></html>

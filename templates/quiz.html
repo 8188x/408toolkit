@@ -1,41 +1,45 @@
-{% extends "base.html" %}
-{% block title %}刷题模式{% endblock %}
+{% extends "base.html" %}{% block title %}刷题模式{% endblock %}
 {% block content %}
 <style>
-.qc{max-width:700px;margin:0 auto 14px}
-.qc .q{font-size:.9rem;font-weight:600;margin:10px 0}
+.qc{border-color:rgba(74,124,250,.08);margin-bottom:10px;max-width:700px;margin-left:auto;margin-right:auto}
+.qc .q{font-size:.85rem;font-weight:600;margin:10px 0;color:#dce0f0}
 .qc .ops{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.qc .ops div{padding:10px 12px;background:#f5f6fa;border-radius:8px;font-size:.82rem;cursor:pointer;transition:all .12s;border:2px solid transparent}
-.qc .ops div:hover{background:#eef0f5}
-.qc .ops div.ok{background:#e6f4f0;border-color:#4ad4a0;pointer-events:none}
-.qc .ops div.no{background:#fde8e8;border-color:#e05050;pointer-events:none}
-.qc .res{margin-top:8px;padding:8px;border-radius:6px;font-size:.82rem;font-weight:600;text-align:center}.qc .res.ok{background:#e6f4f0;color:#1a6a5e}.qc .res.no{background:#fde8e8;color:#a04040}.sc{text-align:center;margin-bottom:16px;font-size:.9rem}.sc b{color:#2c3e7a}
+.qc .ops div{
+  padding:10px 14px;background:rgba(11,14,23,.4);border-radius:8px;font-size:.8rem;
+  cursor:pointer;transition:all .2s;border:1px solid transparent;color:rgba(255,255,255,.8)
+}
+.qc .ops div:hover{background:rgba(74,124,250,.1);border-color:rgba(74,124,250,.2)}
+.qc .ops div.ok{background:rgba(74,212,160,.12);border-color:#4ad4a0!important;pointer-events:none}
+.qc .ops div.no{background:rgba(224,80,80,.12);border-color:#e05050!important;pointer-events:none}
+.qc .res{margin-top:8px;padding:8px;border-radius:6px;font-size:.8rem;font-weight:600;text-align:center}
+.qc .res.ok{background:rgba(74,212,160,.1);color:#4ad4a0}
+.qc .res.no{background:rgba(224,80,80,.1);color:#e05050}
+.sc{text-align:center;margin-bottom:16px;font-size:.85rem;color:rgba(255,255,255,.6)}
+.sc b{color:#4a7cfa}
+.st{font-size:.72rem;color:rgba(255,255,255,.35);text-align:center;margin-bottom:12px}
 </style>
-<div class="fb">
-  <form action="/quiz" method="get" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-    <select name="sub"><option value="">全部</option>{% for k,v in subjects.items() %}<option value="{{ k }}" {% if sel==k %}selected{% endif %}>{{ v.name }}</option>{% endfor %}</select>
-    <button class="btn btn-p" type="submit">开始</button>
-  </form>
-</div>
+<div class="fb anim"><form action="/quiz" method="get" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><select name="sub"><option value="">全部</option>{% for k,v in subjects.items() %}<option value="{{ k }}" {% if sel==k %}selected{% endif %}>{{ v.name }}</option>{% endfor %}</select><button class="btn btn-p" type="submit">开始</button></form></div>
 <div class="sc">答对: <b id="sc">0</b> / {{ questions|length }}</div>
 {% for q in questions %}
-<div class="cd qc" id="q{{ q.id }}" data-ans="{{ q.ans }}">
+<div class="cd qc" id="q{{ q.id }}">
   <span class="tg" style="background:{{ subjects[q.sub].color }}">{{ subjects[q.sub].name }}</span>
   <div class="q">{{ loop.index }}. {{ q.q }}</div>
-  <div class="ops">{% for o in q.opts %}<div onclick="ck(this,'{{ q.ans }}','{{ q.id }}')"><b>{{ o[0] }}</b>. {{ o[1] }}</div>{% endfor %}</div>
+  <div class="ops">{% for o in q.opts %}<div onclick="ck(this,'{{ q.ans }}')"><b>{{ o[0] }}</b>. {{ o[1] }}</div>{% endfor %}</div>
   <div class="res" style="display:none"></div>
 </div>
 {% endfor %}
 <script>
 var sc=0;
-function ck(el,ans,qid){
-  var l=el.textContent.trim().charAt(0);
-  if(l!==ans){fetch('/api/wrong/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({qid:parseInt(qid)})});}
-  if(el.parentElement.parentElement.querySelector('.ok')||el.parentElement.parentElement.querySelector('.no'))return;
-  var l=el.textContent.trim().charAt(0);
-  if(l===ans){el.classList.add('ok');sc++;document.getElementById('sc').textContent=sc;el.parentElement.parentElement.querySelector('.res').innerHTML='✅ 正确';}
-  else{el.classList.add('no');el.parentElement.querySelectorAll('div').forEach(function(d){if(d.textContent.trim().charAt(0)===ans)d.classList.add('ok');});el.parentElement.parentElement.querySelector('.res').innerHTML='❌ 错误，答案: '+ans;}
-  el.parentElement.parentElement.querySelector('.res').style.display='block';
+function ck(el,ans){
+  var p=el.parentElement;var card=el.closest('.qc');
+  if(card.querySelector('.ok')||card.querySelector('.no'))return;
+  var l=el.textContent.trim().charAt(0);var res=card.querySelector('.res');
+  if(l===ans){el.classList.add('ok');sc++;document.getElementById('sc').textContent=sc;res.innerHTML='✅ 正确';res.className='res ok';
+    fetch('/api/wrong/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({qid:parseInt(card.id.slice(1))})});}
+  else{el.classList.add('no');
+    p.querySelectorAll('div').forEach(function(d){if(d.textContent.trim().charAt(0)===ans)d.classList.add('ok');});
+    res.innerHTML='❌ 错误，答案: '+ans;res.className='res no';}
+  res.style.display='block';
 }
 </script>
 {% endblock %}

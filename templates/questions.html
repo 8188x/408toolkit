@@ -1,31 +1,28 @@
-{% extends "base.html" %}
-{% block title %}408 题库{% endblock %}
+{% extends "base.html" %}{% block title %}408 题库{% endblock %}
 {% block content %}
 <style>
-.qc{margin-bottom:8px}.qc .tg{color:#fff}.qc .q{font-size:.88rem;font-weight:600;margin:6px 0}.qc .ops{display:grid;grid-template-columns:1fr 1fr;gap:4px}.qc .ops div{padding:6px 10px;background:#f5f6fa;border-radius:6px;font-size:.8rem}
+.qc{border-color:rgba(74,124,250,.08);margin-bottom:10px;cursor:pointer;transition:all .2s}
+.qc:hover{border-color:rgba(74,124,250,.2)}
+.qc .q{font-size:.85rem;font-weight:600;margin:8px 0;color:#dce0f0}
+.qc .ops{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.qc .ops div{padding:6px 10px;background:rgba(11,14,23,.4);border-radius:6px;font-size:.78rem;border:1px solid transparent;transition:all .15s}
+.qc .ops div:hover{border-color:rgba(74,124,250,.15)}
+.qc .ans{margin-top:6px;padding:6px 12px;background:rgba(74,212,160,.08);border-radius:6px;font-size:.78rem;color:#4ad4a0;display:none;border:1px solid rgba(74,212,160,.15)}
 </style>
-<div class="fb">
+<div class="fb anim">
   <form action="/questions" method="get" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-    <select name="sub">
-      <option value="">全部</option>
-      {% for k,v in subjects.items() %}
-      <option value="{{ k }}" {% if sel == k %}selected{% endif %}>{{ v.name }}</option>
-      {% endfor %}
-    </select>
-    <input name="q" placeholder="搜索题目" value="{{ q }}" style="width:160px">
+    <select name="sub"><option value="">全部</option>{% for k,v in subjects.items() %}<option value="{{ k }}" {% if sel==k %}selected{% endif %}>{{ v.name }}</option>{% endfor %}</select>
+    <input name="q" placeholder="搜索题目" value="{{ sq }}" style="width:160px">
     <button class="btn btn-p" type="submit">筛选</button>
-    <span style="font-size:.78rem;color:#8896b8">{{ questions|length }} 题</span>
+    <span style="font-size:.78rem;color:rgba(255,255,255,.35)">{{ questions|length }} 题</span>
   </form>
 </div>
 {% for qt in questions %}
-<div class="cd qc">
+<div class="cd qc anim" onclick="this.querySelector('.ans').style.display='block'">
   <span class="tg" style="background:{{ subjects[qt.sub].color }}">{{ subjects[qt.sub].name }}</span>
   <div class="q">{{ qt.q }}</div>
-  <div class="ops">
-    {% for o in qt.opts %}<div><b>{{ o[0] }}</b>. {{ o[1] }}</div>{% endfor %}
-  </div>
-  <div class="ans" style="margin-top:6px;padding:4px 10px;background:#e6f4f0;border-radius:4px;font-size:.78rem;color:#1a6a5e;display:none">✅ 答案: {{ qt.ans }}</div>
+  <div class="ops">{% for o in qt.opts %}<div><b>{{ o[0] }}</b>. {{ o[1] }}</div>{% endfor %}</div>
+  <div class="ans">✅ 答案: {{ qt.ans }}</div>
 </div>
-{% else %}<div style="text-align:center;padding:40px;color:#8896b8">暂无匹配题目</div>{% endfor %}
-<script>document.querySelectorAll('.qc').forEach(function(c){c.onclick=function(){this.querySelector('.ans').style.display='block'}});</script>
+{% else %}<div style="text-align:center;padding:60px;color:rgba(255,255,255,.3)">暂无匹配题目</div>{% endfor %}
 {% endblock %}

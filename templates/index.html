@@ -1,25 +1,50 @@
-{% extends "base.html" %}
-{% block title %}408Toolkit - 408考研学习平台{% endblock %}
+{% extends "base.html" %}{% block title %}408Toolkit{% endblock %}
 {% block content %}
 <style>
-.hero{background:linear-gradient(135deg,#1a2744,#2c3e7a);color:#fff;border-radius:12px;padding:40px;margin-bottom:24px}
-.hero h1{font-size:1.4rem;margin-bottom:6px}
-.hero p{font-size:.85rem;color:#a0b4d8;max-width:500px}
+.hero{
+  background:linear-gradient(135deg,rgba(74,124,250,.08),rgba(74,124,250,.02));
+  border:1px solid rgba(74,124,250,.12);border-radius:16px;
+  padding:50px 40px;margin-bottom:24px;text-align:center;
+  position:relative;overflow:hidden
+}
+.hero::before{
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:radial-gradient(circle at 30% 50%,rgba(74,124,250,.06),transparent 50%);
+  animation:heroGlow 8s ease infinite
+}
+@keyframes heroGlow{0%,100%{transform:translate(0,0)}50%{transform:translate(5%,5%)}}
+.hero h1{font-size:1.5rem;margin-bottom:6px;position:relative;z-index:1}
+.hero p{font-size:.85rem;color:rgba(255,255,255,.4);position:relative;z-index:1;max-width:500px;margin:0 auto}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.card{background:#fff;border-radius:10px;padding:20px;text-decoration:none;color:inherit;box-shadow:0 1px 4px rgba(0,0,0,.06);transition:all .15s;display:block}
-.card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.1)}
-.card .ico{font-size:1.5rem;margin-bottom:6px}
+.card{
+  background:rgba(17,22,43,.6);backdrop-filter:blur(10px);
+  border:1px solid rgba(74,124,250,.1);border-radius:12px;
+  padding:24px;text-decoration:none;color:inherit;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  display:block;position:relative;overflow:hidden
+}
+.card::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(74,124,250,.05),transparent);
+  transition:left .6s
+}
+.card:hover::before{left:100%}
+.card:hover{
+  border-color:rgba(74,124,250,.25);transform:translateY(-4px);
+  box-shadow:0 12px 40px rgba(74,124,250,.12)
+}
+.card .ico{font-size:1.6rem;margin-bottom:8px}
 .card h3{font-size:.9rem;font-weight:600;margin-bottom:4px}
-.card p{font-size:.78rem;color:#5a5a7a}
+.card p{font-size:.78rem;color:rgba(255,255,255,.4)}
 </style>
-<div class="hero">
+<div class="hero anim">
   <h1>408 考研学习平台</h1>
-  <p>覆盖数据结构、计组、操作系统、计算机网络四门课的题库与代码库</p>
+  <p>数据结构·计组·操作系统·计网 — 题库 / 刷题 / 代码 / 资料</p>
 </div>
 <div class="cards">
-  <a href="/questions" class="card"><div class="ico">📝</div><h3>题库 (51题)</h3><p>按知识点筛选，点击显示答案。覆盖408四门课核心考点。</p></a>
-  <a href="/quiz" class="card"><div class="ico">🎯</div><h3>刷题模式</h3><p>随机抽题，选择答案即判对错，自动计分。可按科目筛选。</p></a>
-  <a href="/code" class="card"><div class="ico">💻</div><h3>算法代码 (12个)</h3><p>排序、树、图、Cache、PV操作等408常考算法手写实现。</p></a>
-  <a href="/summary" class="card"><div class="ico">📖</div><h3>知识点速查</h3><p>四门课的知识点概览，快速回顾复习重点。</p></a>
+  <a href="/questions" class="card anim anim-d1"><div class="ico">📝</div><h3>题库 · 302题</h3><p>按科目筛选，覆盖四门课核心考点</p></a>
+  <a href="/quiz" class="card anim anim-d1"><div class="ico">🎯</div><h3>刷题模式</h3><p>随机出题，即时判对错，自动计分</p></a>
+  <a href="/code" class="card anim anim-d2"><div class="ico">💻</div><h3>算法代码 · 107个</h3><p>排序/树/图/OS/计组/计网手写实现</p></a>
+  <a href="/materials" class="card anim anim-d3"><div class="ico">📖</div><h3>复习资料</h3><p>各科目核心知识点系统总结</p></a>
 </div>
 {% endblock %}
