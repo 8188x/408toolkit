@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}408 题库{% endblock %}
+{% block content %}
+<style>
+.q-card {
+  background: #fff; border-radius: 10px; padding: 20px; margin-bottom: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.q-card .topic { font-size: .72rem; color: #2c3e7a; background: #e8f0fe; display: inline-block; padding: 2px 10px; border-radius: 10px; margin-bottom: 6px; }
+.q-card h3 { font-size: .9rem; font-weight: 600; margin-bottom: 10px; }
+.q-card .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.q-card .opt { padding: 8px 12px; background: #f5f6fa; border-radius: 6px; font-size: .82rem; }
+.q-card .ans { margin-top: 8px; padding: 6px 12px; background: #e6f4f0; border-radius: 6px; font-size: .78rem; color: #1a6a5e; display: none; }
+.q-card.show .ans { display: block; }
+.filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
+.filter-bar select, .filter-bar input { padding: 6px 12px; border: 1px solid #d0d8e8; border-radius: 6px; font-size: .82rem; }
+.filter-bar .btn { padding: 6px 16px; border-radius: 6px; border: none; cursor: pointer; font-size: .8rem; font-weight: 500; }
+.btn-p { background: #2c3e7a; color: #fff; }
+.btn-g { background: #eef0f5; color: #5a6a8a; border: 1px solid #d0d8e8; }
+.count { font-size: .82rem; color: #8896b8; }
+</style>
+
+<div class="filter-bar">
+  <form action="/questions" method="get" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <select name="topic">
+      <option value="">全部科目</option>
+      {% for k,v in topics.items() %}
+      <option value="{{ k }}" {% if selected == k %}selected{% endif %}>{{ v }}</option>
+      {% endfor %}
+    </select>
+    <button class="btn btn-p" type="submit">筛选</button>
+    <span class="count">共 {{ questions|length }} 题</span>
+  </form>
+</div>
+
+{% for q in questions %}
+<div class="q-card" onclick="this.classList.toggle('show')">
+  <span class="topic">{{ topics[q.topic] }}</span>
+  <h3>{{ q.title }}</h3>
+  <div class="opts">
+    {% for label,text in q.opts %}
+    <div class="opt"><b>{{ label }}</b>. {{ text }}</div>
+    {% endfor %}
+  </div>
+  <div class="ans">✅ 正确答案: {{ q.ans }}</div>
+</div>
+{% else %}
+<div style="text-align:center;padding:40px;color:#8896b8">暂无题目</div>
+{% endfor %}
+
+<script>
+// 点击显示答案
+document.querySelectorAll('.q-card').forEach(function(c){
+  c.addEventListener('click', function(){this.classList.toggle('show');});
+});
+</script>
+{% endblock %}

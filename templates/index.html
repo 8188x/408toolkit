@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}408Toolkit - 首页{% endblock %}
+{% block content %}
+<style>
+.hero-box {
+  background: linear-gradient(135deg, #1a2744, #2c3e7a); color: #fff;
+  border-radius: 12px; padding: 40px; margin-bottom: 24px;
+}
+.hero-box h1 { font-size: 1.5rem; margin-bottom: 8px; }
+.hero-box .sub { font-size: .9rem; color: #a0b4d8; }
+.hero-box .big { font-size: 2.5rem; font-weight: 800; color: #ffd700; margin: 12px 0 4px; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.card {
+  background: #fff; border-radius: 10px; padding: 20px; text-decoration: none; color: inherit;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06); transition: all .15s; display: block;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.1); }
+.card .ico { font-size: 1.6rem; margin-bottom: 8px; }
+.card h3 { font-size: .95rem; font-weight: 600; margin-bottom: 6px; }
+.card p { font-size: .8rem; color: #5a5a7a; }
+</style>
+
+<div class="hero-box">
+  <h1>408 考研实用工具集</h1>
+  <div class="sub">哈工大深圳 · 085404 计算机技术 · 目标 410</div>
+  <div class="big">410</div>
+</div>
+
+<div class="cards">
+  <a href="/questions" class="card">
+    <div class="ico">📝</div>
+    <h3>408 题库</h3>
+    <p>覆盖数据结构、计组、OS、计网四门课。选择题练习，按知识点筛选。</p>
+  </a>
+  <a href="/quiz" class="card">
+    <div class="ico">🎯</div>
+    <h3>刷题模式</h3>
+    <p>随机抽题，选完即出答案，自动计分。适合碎片时间自测。</p>
+  </a>
+  <a href="/codes" class="card">
+    <div class="ico">💻</div>
+    <h3>算法代码库</h3>
+    <p>408 各算法的手写实现。排序、树、图、查找，全部从零写起。</p>
+  </a>
+  <a href="/about" class="card">
+    <div class="ico">📖</div>
+    <h3>关于项目</h3>
+    <p>项目说明、技术栈、GitHub 地址。一个完整的全栈 Web 应用。</p>
+  </a>
+</div>
+{% endblock %}
