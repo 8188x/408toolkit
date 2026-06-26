@@ -1,300 +1,402 @@
-{% extends "base.html" %}
-{% block title %}408Toolkit - 粒子树启动动画{% endblock %}
-{% block head %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>408Toolkit — 考研上岸</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;min-height:100vh;overflow-x:hidden;background:#05080f;color:#d0d8f0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
-#splash{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;background:#05080f}
-#splash canvas{display:block;width:100%;height:100%}
-.mn{opacity:0;transition:opacity 1.8s ease .3s;position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
-body.loaded #splash{animation:splashFade 1.8s cubic-bezier(.4,0,.2,1) forwards;pointer-events:none}
-@keyframes splashFade{0%{opacity:1}100%{opacity:0;visibility:hidden;z-index:-1}}
-body.loaded .mn{opacity:1}
-.hero{text-align:center;padding:60px 20px 40px;max-width:800px;width:100%;margin:0 auto}
-.hero h1{font-size:clamp(2rem,6vw,3.5rem);font-weight:200;letter-spacing:8px;color:#e0e6ff;margin-bottom:12px;text-shadow:0 0 40px rgba(160,190,255,.15)}
-.hero p{font-size:.92rem;color:rgba(200,210,240,.35);letter-spacing:3px;line-height:1.8}
-.divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,rgba(180,200,240,.3),transparent);margin:0 auto 20px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;max-width:900px;width:100%;margin:40px auto 0;padding:0 10px}
-.card{background:rgba(255,255,255,.025);border:1px solid rgba(180,200,240,.07);border-radius:8px;padding:28px 20px;text-decoration:none;color:inherit;transition:all .35s ease;backdrop-filter:blur(2px)}
-.card:hover{background:rgba(255,255,255,.06);border-color:rgba(180,200,240,.15);transform:translateY(-3px);box-shadow:0 6px 30px rgba(100,140,255,.06)}
-.card .ico{font-size:1.6rem;display:block;margin-bottom:8px}
-.card h3{font-size:.95rem;font-weight:500;letter-spacing:1px;margin-bottom:5px;color:#c8d4f0}
-.card p{font-size:.74rem;line-height:1.6;color:rgba(200,210,240,.28)}
-.card .tag{display:inline-block;margin-top:10px;font-size:.65rem;color:rgba(200,210,240,.22);letter-spacing:1px}
-.stats{display:flex;justify-content:center;gap:40px;margin-top:50px;flex-wrap:wrap;padding-bottom:40px}
-.stat{text-align:center}
-.stat .num{font-size:2rem;font-weight:200;letter-spacing:2px;color:#c8d4f0;text-shadow:0 0 20px rgba(160,190,255,.08)}
-.stat .lbl{font-size:.7rem;color:rgba(200,210,240,.2);letter-spacing:2px;margin-top:3px}
-.hd{position:fixed;top:0;left:0;right:0;z-index:2;background:rgba(5,8,15,.7);backdrop-filter:blur(15px);border-bottom:1px solid rgba(180,200,240,.06);padding:0 20px;opacity:0;transition:opacity .8s ease}
-body.loaded .hd{opacity:1}
-.hi{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:50px}
-.lg{font-size:1.05rem;font-weight:700;text-decoration:none;color:#fff;letter-spacing:-.5px}
-.lg em{font-style:normal;color:#5a7abe;text-shadow:0 0 18px rgba(120,160,255,.2)}
-.nv{display:flex;gap:1px;align-items:center}
-.nv a{display:inline-block;padding:5px 12px;border-radius:5px;text-decoration:none;color:rgba(255,255,255,.55);font-size:.73rem;font-weight:500;transition:all .2s}
-.nv a:hover{color:#fff;background:rgba(255,255,255,.04)}
-.ft{text-align:center;padding:16px;font-size:.68rem;color:rgba(200,210,240,.2);opacity:0;transition:opacity .8s ease}
-body.loaded .ft{opacity:1}
+html{scroll-behavior:smooth}
+body{
+  background:#06080f;color:#c8d0e0;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+  overflow-x:hidden;line-height:1.7
+}
+#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.orb-layer{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:hidden}
+.orb{
+  position:absolute;border-radius:50%;filter:blur(90px);
+  animation:orbFloat 25s ease-in-out infinite alternate
+}
+.orb-1{width:650px;height:650px;top:-250px;right:-150px;
+  background:radial-gradient(circle,rgba(60,100,220,.1),transparent 70%)}
+.orb-2{width:550px;height:550px;bottom:-200px;left:-100px;
+  background:radial-gradient(circle,rgba(120,80,220,.08),transparent 70%);animation-delay:-8s}
+.orb-3{width:400px;height:400px;top:45%;left:45%;
+  background:radial-gradient(circle,rgba(40,140,200,.06),transparent 70%);animation-delay:-16s}
+@keyframes orbFloat{
+  0%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(40px,-30px) scale(1.06)}
+  66%{transform:translate(-30px,40px) scale(.94)}
+  100%{transform:translate(20px,-15px) scale(1.03)}
+}
+.content{position:relative;z-index:1}
+.hd{
+  position:fixed;top:0;left:0;right:0;z-index:100;padding:0 28px;height:56px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(6,8,15,.75);backdrop-filter:blur(28px) saturate(1.4);
+  border-bottom:1px solid rgba(200,210,240,.04);transition:background .3s
+}
+.hi{width:100%;max-width:1100px;display:flex;align-items:center;justify-content:space-between}
+.lg{
+  font-size:1.05rem;font-weight:800;text-decoration:none;color:#f0f2ff;
+  letter-spacing:-.4px;display:flex;align-items:center;gap:9px
+}
+.lg .icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#4a7cf8,#7a5cf8);border-radius:6px;font-size:.65rem;font-weight:700;color:#fff}
+.lg em{font-style:normal;background:linear-gradient(135deg,#5a8aff,#a07aff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nv{display:flex;gap:2px;align-items:center}
+.nv a{
+  padding:5px 13px;border-radius:6px;text-decoration:none;color:rgba(255,255,255,.4);
+  font-size:.74rem;font-weight:500;transition:all .25s;position:relative
+}
+.nv a:hover{color:#fff;background:rgba(255,255,255,.03)}
+.nv a.act{color:#fff;background:rgba(90,124,248,.08)}
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:100px 28px 60px;position:relative;text-align:center
+}
+.hero-inner{max-width:780px;width:100%;position:relative}
+.hero-glow{
+  position:absolute;top:50%;left:50%;width:600px;height:600px;margin:-300px 0 0 -300px;
+  background:radial-gradient(circle,rgba(60,100,220,.06),transparent 70%);
+  z-index:-1;pointer-events:none
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;padding:4px 14px 4px 10px;border-radius:20px;
+  font-size:.62rem;font-weight:600;letter-spacing:.8px;text-transform:uppercase;
+  background:linear-gradient(135deg,rgba(74,124,248,.1),rgba(122,92,248,.06));
+  border:1px solid rgba(74,124,248,.12);color:rgba(150,175,255,.6);margin-bottom:30px
+}
+.hero-badge .pulse-dot{width:5px;height:5px;border-radius:50%;background:#5a8aff;animation:pulse 2.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+.hero h1{
+  font-size:clamp(2.4rem,5.8vw,4rem);font-weight:800;letter-spacing:-1.4px;line-height:1.15;
+  margin-bottom:14px
+}
+.hero h1 .t1{color:#f0f2ff}
+.hero h1 .t2{
+  background:linear-gradient(135deg,#f0f2ff 25%,#8090d0 60%,#6a5ac0);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
+}
+.hero h1 .t3{
+  background:linear-gradient(135deg,#5a8aff,#a07aff);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
+}
+.hero-sub{
+  font-size:.88rem;color:rgba(200,210,240,.28);letter-spacing:.4px;line-height:1.8;
+  max-width:500px;margin:0 auto 38px
+}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;padding:11px 28px;border-radius:8px;
+  font-size:.8rem;font-weight:600;text-decoration:none;transition:all .3s cubic-bezier(.4,0,.2,1);
+  cursor:pointer;border:none;position:relative;overflow:hidden
+}
+.btn-primary{
+  background:linear-gradient(135deg,#4a7cf8,#7a5cf8);color:#fff;
+  box-shadow:0 4px 28px rgba(74,124,248,.3)
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(74,124,248,.45)}
+.btn-outline{
+  background:rgba(255,255,255,.02);border:1px solid rgba(200,210,240,.08);
+  color:rgba(200,210,240,.5);backdrop-filter:blur(8px)
+}
+.btn-outline:hover{border-color:rgba(200,210,240,.18);color:#fff;background:rgba(255,255,255,.05)}
+.subject-pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:44px}
+.pill{
+  padding:6px 16px;border-radius:6px;font-size:.65rem;font-weight:500;letter-spacing:.5px;
+  background:rgba(255,255,255,.02);border:1px solid rgba(200,210,240,.06);
+  color:rgba(200,210,240,.25);transition:all .3s
+}
+.pill:hover{background:rgba(74,124,248,.06);border-color:rgba(74,124,248,.15);color:rgba(150,175,255,.5)}
+.section{padding:80px 28px 80px;max-width:1100px;margin:0 auto}
+.section-title{text-align:center;margin-bottom:48px}
+.section-title h2{font-size:1.5rem;font-weight:700;letter-spacing:-.6px;color:#e8ecff;margin-bottom:8px}
+.section-title p{font-size:.78rem;color:rgba(200,210,240,.2);letter-spacing:.3px}
+.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:12px}
+.fcard{
+  position:relative;padding:30px 24px;border-radius:10px;text-decoration:none;color:inherit;
+  transition:all .4s cubic-bezier(.4,0,.2,1);overflow:hidden;
+  background:linear-gradient(135deg,rgba(255,255,255,.018),rgba(255,255,255,.005));
+  border:1px solid rgba(200,210,240,.045)
+}
+.fcard::before{
+  content:'';position:absolute;inset:0;border-radius:10px;padding:1px;
+  background:linear-gradient(135deg,rgba(200,210,240,.05),transparent 60%,transparent);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:0;transition:opacity .5s
+}
+.fcard:hover::before{opacity:1}
+.fcard::after{
+  content:'';position:absolute;top:0;left:0;width:100%;height:100%;
+  background:radial-gradient(600px circle at var(--cx,50%) var(--cy,0%),rgba(74,124,248,.04),transparent 50%);
+  opacity:0;transition:opacity .5s;pointer-events:none
+}
+.fcard:hover::after{opacity:1}
+.fcard:hover{transform:translateY(-5px);border-color:rgba(200,210,240,.08)}
+.fcard .ico{font-size:1.5rem;display:block;margin-bottom:12px}
+.fcard h3{font-size:.85rem;font-weight:600;letter-spacing:.2px;margin-bottom:4px;color:#d0d8f0}
+.fcard p{font-size:.68rem;line-height:1.6;color:rgba(200,210,240,.22)}
+.fcard .tag{display:inline-block;margin-top:12px;font-size:.6rem;color:rgba(200,210,240,.14);letter-spacing:.3px;transition:color .3s}
+.fcard:hover .tag{color:rgba(200,210,240,.25)}
+.subjects{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:800px){.subjects{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.subjects{grid-template-columns:1fr}}
+.scard{
+  padding:22px 18px;border-radius:10px;text-align:center;
+  background:rgba(255,255,255,.012);border:1px solid rgba(200,210,240,.04);
+  transition:all .4s cubic-bezier(.4,0,.2,1);cursor:default;
+  position:relative;overflow:hidden
+}
+.scard::before{
+  content:'';position:absolute;top:0;left:0;width:100%;height:2px;
+  opacity:0;transition:opacity .4s
+}
+.scard:hover::before{opacity:1}
+.scard.s1{border-color:rgba(90,138,255,.1)}.scard.s1::before{background:linear-gradient(90deg,#5a8aff,#7a6aff)}
+.scard.s2{border-color:rgba(255,130,80,.1)}.scard.s2::before{background:linear-gradient(90deg,#ff8250,#ff5a7a)}
+.scard.s3{border-color:rgba(80,200,160,.1)}.scard.s3::before{background:linear-gradient(90deg,#50c8a0,#30e0c0)}
+.scard.s4{border-color:rgba(180,100,220,.1)}.scard.s4::before{background:linear-gradient(90deg,#b464dc,#d060e0)}
+.scard:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.scard .s-icon{font-size:1.6rem;margin-bottom:10px;display:block}
+.scard h4{font-size:.8rem;font-weight:600;color:#dde0f5;margin-bottom:3px}
+.scard .s-count{font-size:.62rem;color:rgba(200,210,240,.2);letter-spacing:.3px}
+.stats-row{display:flex;justify-content:center;gap:64px;flex-wrap:wrap;padding:32px 0}
+.stat-item{text-align:center;padding:0 6px}
+.stat-item .num{
+  font-size:2rem;font-weight:800;letter-spacing:1px;
+  background:linear-gradient(135deg,#dce0ff,#8898d0);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent
+}
+.stat-item .lbl{font-size:.64rem;color:rgba(200,210,240,.14);letter-spacing:1.8px;margin-top:4px;text-transform:uppercase}
+.divider{max-width:200px;margin:0 auto;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(200,210,240,.04),transparent)}
+.ft{
+  text-align:center;padding:36px 28px 28px;font-size:.62rem;color:rgba(200,210,240,.08);
+  letter-spacing:.5px;border-top:1px solid rgba(200,210,240,.02);max-width:1100px;margin:0 auto
+}
+.ft-links{display:flex;justify-content:center;gap:32px;margin-bottom:12px;flex-wrap:wrap}
+.ft-links a{color:rgba(200,210,240,.14);text-decoration:none;font-size:.64rem;transition:color .3s}
+.ft-links a:hover{color:rgba(200,210,240,.3)}
+.fade-in{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+@media(max-width:600px){
+  .nv a{padding:4px 10px;font-size:.68rem}
+  .hero{padding:80px 18px 40px}
+  .section{padding:48px 18px 48px}
+  .feature-grid{grid-template-columns:1fr}
+  .stat-item .num{font-size:1.5rem}
+}
 </style>
-{% endblock %}
-{% block content %}
-<div id="splash"></div>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div class="orb-layer">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<div class="content">
 <div class="hd"><div class="hi">
-<a href="/" class="lg"><em>408</em>Toolkit</a>
+<a href="/" class="lg"><span class="icon">4</span><span><em>408</em>Toolkit</span></a>
 <div class="nv">
 <a href="/questions">题库</a>
 <a href="/quiz">刷题</a>
 <a href="/code">代码</a>
 <a href="/materials">资料</a>
-{% if current_user %}<a href="/logout">退出</a>{% endif %}
+<a href="/wrong">错题</a>
+<a href="/login">登录</a>
 </div></div></div>
-
-<div class="mn">
-  <div class="hero">
-    <h1>408Toolkit</h1>
-    <div class="divider"></div>
-    <p>计算机统考 · 全科目复习平台</p>
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-glow"></div>
+    <div class="hero-badge"><span class="pulse-dot"></span>计算机统考 · 408</div>
+    <h1>
+      <span class="t1">408考研</span><br>
+      <span class="t3">一站式</span> <span class="t2">复习平台</span>
+    </h1>
+    <p class="hero-sub">
+      数据结构 · 组成原理 · 操作系统 · 计算机网络<br>
+      四门核心科目全覆盖，302 道经典考题
+    </p>
+    <div class="hero-actions">
+      <a href="/questions" class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        开始刷题
+      </a>
+      <a href="/materials" class="btn btn-outline">浏览资料</a>
+    </div>
+    <div class="subject-pills">
+      <span class="pill">数据结构</span>
+      <span class="pill">计算机组成原理</span>
+      <span class="pill">操作系统</span>
+      <span class="pill">计算机网络</span>
+    </div>
   </div>
-  <div class="grid">
-    <a href="/questions" class="card"><span class="ico">📝</span><h3>题库 · 302题</h3><p>四门课全部核心考点</p><span class="tag">立即刷题 →</span></a>
-    <a href="/quiz" class="card"><span class="ico">🎯</span><h3>刷题模式</h3><p>随机出题 · 即时判对错</p><span class="tag">开始挑战 →</span></a>
-    <a href="/code" class="card"><span class="ico">💻</span><h3>算法代码 · 107个</h3><p>排序 · 树 · 图 · 手写实现</p><span class="tag">查看代码 →</span></a>
-    <a href="/materials" class="card"><span class="ico">📖</span><h3>复习资料</h3><p>核心知识点系统总结</p><span class="tag">开始学习 →</span></a>
-  </div>
-  <div class="stats">
-    <div class="stat"><div class="num">302</div><div class="lbl">总题数</div></div>
-    <div class="stat"><div class="num">107</div><div class="lbl">代码实现</div></div>
-    <div class="stat"><div class="num">4</div><div class="lbl">覆盖科目</div></div>
+</section>
+<div class="section" style="padding-top:0;padding-bottom:0">
+  <div class="stats-row fade-in">
+    <div class="stat-item"><div class="num" data-target="302">0</div><div class="lbl">总题数</div></div>
+    <div class="stat-item"><div class="num" data-target="107">0</div><div class="lbl">代码实现</div></div>
+    <div class="stat-item"><div class="num" data-target="4">0</div><div class="lbl">覆盖科目</div></div>
+    <div class="stat-item"><div class="num" data-target="5">0</div><div class="lbl">复习资料</div></div>
   </div>
 </div>
-<div class="ft">408Toolkit · 计算机考研 · 开源</div>
-<script src="/static/three.min.js"></script>
+<div class="section" style="padding-top:50px">
+  <div class="section-title fade-in">
+    <h2>核心功能</h2>
+    <p>四大模块，覆盖复习全过程</p>
+  </div>
+  <div class="feature-grid">
+    <a href="/questions" class="fcard fade-in">
+      <span class="ico">📝</span>
+      <h3>智能题库</h3>
+      <p>302 道核心考点题，按科目分类筛选，精准定位薄弱环节</p>
+      <span class="tag">浏览题库 →</span>
+    </a>
+    <a href="/quiz" class="fcard fade-in">
+      <span class="ico">🎯</span>
+      <h3>刷题模式</h3>
+      <p>随机抽题即时反馈，自动判对错，模拟考场节奏</p>
+      <span class="tag">开始挑战 →</span>
+    </a>
+    <a href="/code" class="fcard fade-in">
+      <span class="ico">💻</span>
+      <h3>算法代码库</h3>
+      <p>107 个核心代码实现，涵盖排序、树、图、动态规划等</p>
+      <span class="tag">查看代码 →</span>
+    </a>
+    <a href="/materials" class="fcard fade-in">
+      <span class="ico">📖</span>
+      <h3>复习资料</h3>
+      <p>核心知识点系统梳理，高频考点精讲</p>
+      <span class="tag">开始学习 →</span>
+    </a>
+  </div>
+</div>
+<div class="section" style="padding-top:30px">
+  <div class="divider" style="margin-bottom:60px"></div>
+  <div class="section-title fade-in">
+    <h2>四大科目</h2>
+    <p>全面覆盖 408 统考范围</p>
+  </div>
+  <div class="subjects fade-in">
+    <div class="scard s1">
+      <span class="s-icon">🗃️</span>
+      <h4>数据结构</h4>
+      <span class="s-count">75 道经典题</span>
+    </div>
+    <div class="scard s2">
+      <span class="s-icon">🔧</span>
+      <h4>组成原理</h4>
+      <span class="s-count">72 道经典题</span>
+    </div>
+    <div class="scard s3">
+      <span class="s-icon">⚙️</span>
+      <h4>操作系统</h4>
+      <span class="s-count">80 道经典题</span>
+    </div>
+    <div class="scard s4">
+      <span class="s-icon">🌐</span>
+      <h4>计算机网络</h4>
+      <span class="s-count">75 道经典题</span>
+    </div>
+  </div>
+  <div class="stats-row fade-in" style="padding:24px 0 0">
+    <div class="stat-item"><div class="num">100%</div><div class="lbl">考点覆盖</div></div>
+    <div class="stat-item"><div class="num">24/7</div><div class="lbl">随时刷题</div></div>
+    <div class="stat-item"><div class="num">Free</div><div class="lbl">完全免费</div></div>
+  </div>
+</div>
+<div class="ft">
+  <div class="ft-links">
+    <a href="/questions">题库</a>
+    <a href="/quiz">刷题</a>
+    <a href="/code">代码</a>
+    <a href="/materials">资料</a>
+  </div>
+  408Toolkit · 计算机考研复习平台 · 085404
+</div>
+</div>
 <script>
 (function(){
-  var W = window.innerWidth, H = window.innerHeight;
-  var el = document.getElementById("splash");
-  var scene = new THREE.Scene();
-  var camera = new THREE.PerspectiveCamera(45, W/H, 0.1, 200);
-  var renderer = new THREE.WebGLRenderer({antialias: true, alpha: false});
-  renderer.setSize(W, H);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setClearColor(0x05080f, 1);
-  el.appendChild(renderer.domElement);
-
-  // Glow texture: silver-white with icy blue halo
-  var cv = document.createElement("canvas"); cv.width = 64; cv.height = 64;
-  var ctx = cv.getContext("2d");
-  var grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-  grad.addColorStop(0, "rgba(255,255,255,1)");
-  grad.addColorStop(0.04, "rgba(230,240,255,0.95)");
-  grad.addColorStop(0.12, "rgba(190,210,240,0.6)");
-  grad.addColorStop(0.25, "rgba(150,180,220,0.25)");
-  grad.addColorStop(0.45, "rgba(90,130,200,0.08)");
-  grad.addColorStop(1, "rgba(40,70,150,0)");
-  ctx.fillStyle = grad; ctx.fillRect(0, 0, 64, 64);
-  var glowTex = new THREE.CanvasTexture(cv);
-
-  // Silver-ice color palette
-  var pts = [], C = THREE.Color;
-  var colTrunk = new C(0.45,0.5,0.6), colTrunkHi = new C(0.55,0.6,0.7);
-  var colBranch = new C(0.55,0.62,0.72), colBranchHi = new C(0.65,0.72,0.82);
-  var colTwig = new C(0.65,0.72,0.82), colTwigHi = new C(0.75,0.82,0.9);
-  var colLeaf = new C(0.8,0.86,0.94), colLeafHi = new C(0.9,0.93,0.98);
-  var colGlow = new C(0.85,0.9,1), colGlowHi = new C(0.95,0.97,1);
-
-  // Recursive branch generation
-  function genBranch(x1,y1,z1,angle,elev,len,thick,depth,spread,cLo,cHi,sMin,sMax,cnt,wave){
-    var endX=x1+Math.sin(angle)*Math.cos(elev)*len;
-    var endY=y1+Math.sin(elev)*len;
-    var endZ=z1+Math.cos(angle)*Math.cos(elev)*len;
-    var dx=endX-x1,dy=endY-y1,dz=endZ-z1;
-    for(var i=0;i<cnt;i++){
-      var t=i/cnt;
-      var wiggle=Math.sin(t*4.2+angle*2)*wave+Math.cos(t*3.1+elev*1.5)*wave*0.5;
-      var px=x1+dx*t+(Math.random()-0.5)*spread*(1-t*0.5)+wiggle;
-      var py=y1+dy*t+(Math.random()-0.5)*spread*(1-t*0.5);
-      var pz=z1+dz*t+(Math.random()-0.5)*spread*(1-t*0.5)+wiggle*0.7;
-      var cl=new C().lerpColors(cLo,cHi,Math.random()*0.5+0.1);
-      var sz=sMin+Math.random()*(sMax-sMin);
-      pts.push({x:px,y:py,z:pz,r:cl.r,g:cl.g,b:cl.b,s:sz});
+  var c = document.getElementById('bg-canvas');
+  var ctx = c.getContext('2d');
+  var W, H, dots = [];
+  function resize(){ W = c.width = window.innerWidth; H = c.height = window.innerHeight; }
+  window.addEventListener('resize', resize);
+  var count = Math.min(60, Math.floor((W||1400)*(H||900)/15000));
+  for(var i=0;i<count;i++){
+    dots.push({
+      x: Math.random()*(W||1400), y: Math.random()*(H||900),
+      vx: (Math.random()-0.5)*0.25, vy: (Math.random()-0.5)*0.25,
+      r: Math.random()*1.2+0.4, o: Math.random()*0.3+0.15
+    });
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<dots.length;i++){
+      var d = dots[i];
+      d.x+=d.vx; d.y+=d.vy;
+      if(d.x<0)d.x=W;if(d.x>W)d.x=0;if(d.y<0)d.y=H;if(d.y>H)d.y=0;
+      ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(200,215,255,'+d.o+')'; ctx.fill();
     }
-    if(depth>0){
-      var subCnt=2+Math.floor(Math.random()*(depth>1?2:1));
-      var branchPoint=0.45+Math.random()*0.35;
-      var splitX=x1+dx*branchPoint;
-      var splitY=y1+dy*branchPoint;
-      var splitZ=z1+dz*branchPoint;
-      for(var s=0;s<subCnt;s++){
-        var newAngle=angle+(s-(subCnt-1)*0.5)*0.85+(Math.random()-0.5)*0.3;
-        var newElev=elev+(0.12+Math.random()*0.3);
-        var newLen=len*(0.4+Math.random()*0.3);
-        var newSp=spread*0.55;
-        var newCnt=Math.floor(cnt*(0.3+Math.random()*0.15));
-        var newWave=wave*0.45;
-        var newSMin=sMin*0.7,newSMax=sMax*0.7;
-        var newD=depth-1;
-        var nLo,nHi;
-        if(newD>=3){nLo=colTrunk;nHi=colTrunkHi}
-        else if(newD>=2){nLo=colBranch;nHi=colBranchHi}
-        else if(newD>=1){nLo=colTwig;nHi=colTwigHi}
-        else{nLo=colLeaf;nHi=colLeafHi}
-        genBranch(splitX,splitY,splitZ,newAngle,newElev,newLen,thick*0.55,newD,newSp,nLo,nHi,newSMin,newSMax,newCnt,newWave);
+    for(var i=0;i<dots.length;i++){
+      for(var j=i+1;j<dots.length;j++){
+        var dx=dots[i].x-dots[j].x, dy=dots[i].y-dots[j].y, dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<100){
+          ctx.beginPath(); ctx.moveTo(dots[i].x,dots[i].y); ctx.lineTo(dots[j].x,dots[j].y);
+          ctx.strokeStyle='rgba(200,215,255,'+(0.03*(1-dist/100))+')'; ctx.stroke();
+        }
       }
     }
+    requestAnimationFrame(draw);
   }
-
-  // Trunk
-  genBranch(0,-4.8,0,0,Math.PI/2,4.2,1,4,0.15,colTrunk,colTrunkHi,0.2,0.5,2000,0.06);
-  // Main branches
-  var mainBranches=[
-    {h:-2.8,a:0,e:Math.PI/3.5,l:4.2},{h:-2.3,a:.65,e:Math.PI/3,l:4.5},
-    {h:-2.3,a:2.7,e:Math.PI/3.2,l:4.3},{h:-1.8,a:1.3,e:Math.PI/2.9,l:4.8},
-    {h:-1.8,a:3.8,e:Math.PI/3.1,l:4.6},{h:-1.3,a:1.9,e:Math.PI/3,l:4.4},
-    {h:-1.3,a:4.8,e:Math.PI/3.3,l:4.2},{h:-.8,a:.9,e:Math.PI/2.7,l:4.5},
-    {h:-.8,a:3.3,e:Math.PI/2.9,l:4.5},{h:-.8,a:5.3,e:Math.PI/3.2,l:4},
-    {h:-.3,a:2.4,e:Math.PI/2.8,l:4.2},{h:-.3,a:4.3,e:Math.PI/3,l:4},
-    {h:.2,a:.4,e:Math.PI/2.5,l:4},{h:.2,a:2.9,e:Math.PI/2.6,l:4.2},
-    {h:.7,a:1.6,e:Math.PI/2.4,l:3.6},{h:.7,a:4.5,e:Math.PI/2.6,l:3.8},
-    {h:1.2,a:0,e:Math.PI/2.3,l:3.2},{h:1.2,a:3.1,e:Math.PI/2.5,l:3.5},
-    {h:1.7,a:2.2,e:Math.PI/2.2,l:2.8},{h:1.7,a:5,e:Math.PI/2.4,l:3}
-  ];
-  for(var b=0;b<mainBranches.length;b++){
-    var mb=mainBranches[b];
-    genBranch(0,mb.h,0,mb.a,mb.e,mb.l,0.55,3,0.1,colBranch,colBranchHi,0.1,0.24,650,0.05);
+  resize(); draw();
+})();
+</script>
+<script>
+(function(){
+  var els = document.querySelectorAll('.fade-in');
+  function check(){
+    var wt = window.innerHeight;
+    els.forEach(function(el){ var r=el.getBoundingClientRect(); if(r.top<wt*0.85) el.classList.add('visible'); });
   }
-
-  // Canopy fill
-  for(var i=0;i<6000;i++){
-    var theta=Math.random()*Math.PI*2;
-    var r=0.6+Math.random()*5;
-    var h3=-0.5+Math.random()*5.5;
-    var dens=Math.exp(-Math.pow(h3-2.2,2)/4-Math.pow(r-2.5,2)/5);
-    if(Math.random()>dens*1.5&&r>1)continue;
-    var px=Math.sin(theta)*r*(0.55+Math.random()*0.45);
-    var py=h3;
-    var pz=Math.cos(theta)*r*(0.55+Math.random()*0.45);
-    var t=Math.random();var cl=new C().lerpColors(colLeaf,colGlowHi,t);
-    pts.push({x:px,y:py,z:pz,r:cl.r,g:cl.g,b:cl.b,s:0.02+Math.random()*0.12});
+  window.addEventListener('scroll', check); window.addEventListener('resize', check); check();
+})();
+</script>
+<script>
+(function(){
+  var nums = document.querySelectorAll('.stat-item .num[data-target]');
+  if(!nums.length) return;
+  var counted = false;
+  function animate(){
+    if(counted) return;
+    var trigger = false;
+    nums.forEach(function(el){ if(el.getBoundingClientRect().top<window.innerHeight*0.8) trigger=true; });
+    if(!trigger) return;
+    counted = true;
+    nums.forEach(function(el){
+      var t=parseInt(el.getAttribute('data-target'),10), c=0, s=Math.max(1,Math.floor(t/40));
+      var ti=setInterval(function(){ c+=s; if(c>=t){c=t;clearInterval(ti);} el.textContent=c; },30);
+    });
   }
-
-  // Extra glow particles around canopy
-  for(var i=0;i<1500;i++){
-    var theta=Math.random()*Math.PI*2;
-    var r=1.5+Math.random()*4.5;
-    var h3=-0.2+Math.random()*4.8;
-    var cl=new C().lerpColors(colGlow,colGlowHi,Math.random());
-    var px=Math.sin(theta)*r*(0.5+Math.random()*0.5);
-    var py=h3;
-    var pz=Math.cos(theta)*r*(0.5+Math.random()*0.5);
-    pts.push({x:px,y:py,z:pz,r:cl.r,g:cl.g,b:cl.b,s:0.01+Math.random()*0.06});
-  }
-
-  console.log("Particles:",pts.length);
-  var totalCount=pts.length;
-  var pos=new Float32Array(totalCount*3);
-  var colArr=new Float32Array(totalCount*3);
-  var sizeArr=new Float32Array(totalCount);
-  for(var j=0;j<totalCount;j++){
-    var p=pts[j];
-    pos[j*3]=p.x;pos[j*3+1]=p.y;pos[j*3+2]=p.z;
-    colArr[j*3]=p.r;colArr[j*3+1]=p.g;colArr[j*3+2]=p.b;
-    sizeArr[j]=p.s;
-  }
-  var geom=new THREE.BufferGeometry();
-  geom.setAttribute("position",new THREE.BufferAttribute(pos,3));
-  geom.setAttribute("color",new THREE.BufferAttribute(colArr,3));
-  geom.setAttribute("size",new THREE.BufferAttribute(sizeArr,1));
-
-  // Shader: fade in size, keep positions fixed
-  var vertexShader=[
-    "attribute float size;",
-    "attribute vec3 color;",
-    "varying vec3 vColor;",
-    "uniform float uTime;",
-    "uniform float uProgress;",
-    "void main(){",
-    "  vColor=color;",
-    "  vec3 p=position;",
-    "  float n=sin(p.x*3.7+p.y*2.3+p.z*5.1+uTime*0.35)*0.025;",
-    "  n+=sin(p.y*4.1+p.z*1.7+p.x*3.3+uTime*0.22)*0.018;",
-    "  p.x+=n;p.y+=n*0.5;p.z+=n;",
-    "  vec4 mvPosition=modelViewMatrix*vec4(p,1.0);",
-    "  float fade=min(uProgress*1.8,1.0);",
-    "  gl_PointSize=size*(200.0/-mvPosition.z)*fade;",
-    "  gl_Position=projectionMatrix*mvPosition;",
-    "}"
-  ].join("\n");
-  var fragmentShader=[
-    "uniform sampler2D uTexture;",
-    "varying vec3 vColor;",
-    "void main(){",
-    "  vec4 tex=texture2D(uTexture,gl_PointCoord);",
-    "  gl_FragColor=vec4(vColor,tex.a*0.85);",
-    "}"
-  ].join("\n");
-
-  var mat=new THREE.ShaderMaterial({
-    uniforms:{uTime:{value:0},uProgress:{value:0},uTexture:{value:glowTex}},
-    vertexShader:vertexShader,fragmentShader:fragmentShader,
-    transparent:true,depthWrite:false,blending:THREE.AdditiveBlending
-  });
-
-  // Ground glow plane
-  var groundGeom=new THREE.PlaneGeometry(30,2.5);
-  var groundMat=new THREE.ShaderMaterial({
-    uniforms:{uProgress:{value:0}},
-    vertexShader:[
-      "varying vec2 vUv;",
-      "uniform float uProgress;",
-      "void main(){",
-      "  vUv=uv;",
-      "  vec3 p=position;",
-      "  p.y=-2.8+(1.0-uProgress)*0.3;",
-      "  gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);",
-      "}"
-    ].join("\n"),
-    fragmentShader:[
-      "varying vec2 vUv;",
-      "uniform float uProgress;",
-      "void main(){",
-      "  float alpha=(1.0-abs(vUv.x-0.5)*2.0)*uProgress*0.35;",
-      "  alpha=max(0.0,alpha);",
-      "  gl_FragColor=vec4(0.45,0.55,0.8,alpha);",
-      "}"
-    ].join("\n"),
-    transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide
-  });
-  var ground=new THREE.Mesh(groundGeom,groundMat);
-  ground.rotation.x=-Math.PI/2;ground.position.y=-2.8;
-  scene.add(ground);
-
-  var points=new THREE.Points(geom,mat);
-  scene.add(points);
-
-  // Animation
-  var startTime=Date.now(),DURATION=12500,done=false;
-  function anim(){
-    var t=(Date.now()-startTime)/DURATION;
-    var p=Math.min(t,1);
-    // Camera moves from top-down to front
-    var angle=p*Math.PI*0.48;
-    var camDist=9+(1-p)*3;
-    var camY=3.5-p*2.5;
-    camera.position.set(Math.sin(angle)*camDist*0.6,camY,Math.cos(angle)*camDist);
-    camera.lookAt(0,0.8,0);
-    mat.uniforms.uTime.value=t*6;
-    mat.uniforms.uProgress.value=Math.min(p*1.6,1);
-    groundMat.uniforms.uProgress.value=Math.min(p*2,1);
-    renderer.render(scene,camera);
-    if(t>=1&&!done){done=true;document.body.classList.add("loaded");}
-    if(t<1.2)requestAnimationFrame(anim);
-  }
-  anim();
-
-  window.addEventListener("resize",function(){
-    W=window.innerWidth;H=window.innerHeight;
-    renderer.setSize(W,H);camera.aspect=W/H;camera.updateProjectionMatrix();
+  window.addEventListener('scroll', animate); window.addEventListener('resize', animate);
+  setTimeout(animate, 400);
+})();
+</script>
+<script>
+(function(){
+  document.querySelectorAll('.fcard').forEach(function(c){
+    c.addEventListener('mousemove',function(e){
+      var r=c.getBoundingClientRect();
+      c.style.setProperty('--cx',((e.clientX-r.left)/r.width*100)+'%');
+      c.style.setProperty('--cy',((e.clientY-r.top)/r.height*100)+'%');
+    });
   });
 })();
 </script>
-{% endblock %}
+</body>
+</html>
