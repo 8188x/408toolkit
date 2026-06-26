@@ -21,12 +21,12 @@ body{
 /* Header with glass effect */
 .hd{
   background:rgba(11,14,23,.85);backdrop-filter:blur(20px);
-  border-bottom:1px solid rgba(74,124,250,.15);padding:0 20px;
+  border-bottom:1px solid rgba(200,210,235,.15);padding:0 20px;
   position:sticky;top:0;z-index:100
 }
 .hi{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:54px}
 .lg{font-size:1.1rem;font-weight:800;text-decoration:none;color:#fff;letter-spacing:-.5px}
-.lg em{font-style:normal;color:#4a7cfa;text-shadow:0 0 20px rgba(74,124,250,.3)}
+.lg em{font-style:normal;color:#4a7cfa;text-shadow:0 0 20px rgba(200,210,235,.3)}
 .nv{display:flex;gap:2px;align-items:center}
 .nv a,.nv button{
   padding:5px 14px;border-radius:6px;text-decoration:none;color:rgba(255,255,255,.6);
@@ -35,39 +35,39 @@ body{
 }
 .nv a::after,.nv button::after{
   content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
-  width:0;height:2px;background:#4a7cfa;transition:width .2s;border-radius:1px
+  width:0;height:2px;background:#5a7abe;transition:width .2s;border-radius:1px
 }
 .nv a:hover::after,.nv button:hover::after{width:60%}
 .nv a:hover,.nv button:hover{color:#fff}
 .nv a.act{color:#fff;font-weight:600}
-.nv a.act::after{width:60%;box-shadow:0 0 8px rgba(74,124,250,.4)}
+.nv a.act::after{width:60%;box-shadow:0 0 8px rgba(200,210,235,.4)}
 
 /* Main content */
-.mn{max-width:1100px;margin:0 auto;padding:20px;min-height:calc(100vh-120px)}
-.ft{text-align:center;padding:18px;font-size:.7rem;color:rgba(255,255,255,.25);border-top:1px solid rgba(74,124,250,.08);z-index:1;position:relative}
+.mn{max-width:1100px;margin:0 auto;padding:30px 40px 40px;min-height:calc(100vh-80px)}
+.ft{text-align:center;padding:18px;font-size:.7rem;color:rgba(255,255,255,.25);border-top:1px solid rgba(200,210,235,.08);z-index:1;position:relative}
 
 /* Glowing card */
 .cd{
   background:rgba(17,22,43,.8);backdrop-filter:blur(10px);
-  border:1px solid rgba(74,124,250,.12);border-radius:12px;
+  border:1px solid rgba(200,210,235,.12);border-radius:12px;
   padding:18px;margin-bottom:14px;
   transition:all .3s cubic-bezier(.4,0,.2,1);
   position:relative;overflow:hidden
 }
 .cd::before{
   content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(74,124,250,.05),transparent);
+  background:linear-gradient(90deg,transparent,rgba(200,210,235,.05),transparent);
   transition:left .6s
 }
 .cd:hover::before{left:100%}
 .cd:hover{
-  border-color:rgba(74,124,250,.25);transform:translateY(-2px);
-  box-shadow:0 8px 30px rgba(74,124,250,.1)
+  border-color:rgba(200,210,235,.25);transform:translateY(-2px);
+  box-shadow:0 8px 30px rgba(200,210,235,.1)
 }
 
 .ct{
   font-size:.85rem;font-weight:700;margin-bottom:10px;
-  padding-bottom:8px;border-bottom:1px solid rgba(74,124,250,.1);
+  padding-bottom:8px;border-bottom:1px solid rgba(200,210,235,.1);
   display:flex;justify-content:space-between;color:#dce0f0
 }
 .ct .i2{font-size:.7rem;color:rgba(255,255,255,.35);font-weight:400}
@@ -76,13 +76,13 @@ body{
 .fb{
   display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;
   padding:10px 14px;background:rgba(17,22,43,.6);border-radius:10px;
-  border:1px solid rgba(74,124,250,.08);backdrop-filter:blur(10px)
+  border:1px solid rgba(200,210,235,.08);backdrop-filter:blur(10px)
 }
 .fb select,.fb input{
-  padding:5px 10px;background:rgba(11,14,23,.6);border:1px solid rgba(74,124,250,.15);
+  padding:5px 10px;background:rgba(11,14,23,.6);border:1px solid rgba(200,210,235,.15);
   border-radius:6px;color:#dce0f0;font-size:.78rem;transition:border-color .2s
 }
-.fb select:focus,.fb input:focus{outline:none;border-color:#4a7cfa;box-shadow:0 0 12px rgba(74,124,250,.15)}
+.fb select:focus,.fb input:focus{outline:none;border-color:#4a7cfa;box-shadow:0 0 12px rgba(200,210,235,.15)}
 
 /* Glowing buttons */
 .btn{
@@ -94,10 +94,10 @@ body{
   background:rgba(255,255,255,.1);border-radius:50%;transform:translate(-50%,-50%);transition:all .4s
 }
 .btn:active::after{width:200px;height:200px}
-.btn-p{background:#4a7cfa;color:#fff;box-shadow:0 4px 15px rgba(74,124,250,.2)}
-.btn-p:hover{background:#5a8aff;transform:translateY(-1px);box-shadow:0 6px 20px rgba(74,124,250,.3)}
-.btn-g{background:rgba(74,124,250,.1);color:rgba(255,255,255,.7);border:1px solid rgba(74,124,250,.15)}
-.btn-g:hover{background:rgba(74,124,250,.2);color:#fff}
+.btn-p{background:#5a7abe;color:#fff;box-shadow:0 4px 15px rgba(200,210,235,.2)}
+.btn-p:hover{background:#5a8aff;transform:translateY(-1px);box-shadow:0 6px 20px rgba(200,210,235,.3)}
+.btn-g{background:rgba(200,210,235,.1);color:rgba(255,255,255,.7);border:1px solid rgba(200,210,235,.15)}
+.btn-g:hover{background:rgba(200,210,235,.2);color:#fff}
 
 /* Tags */
 .tg{display:inline-block;padding:2px 10px;border-radius:10px;font-size:.65rem;color:#fff;margin:2px}
@@ -111,7 +111,7 @@ body{
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:700px){.g2{grid-template-columns:1fr}}
 
 /* Particles styling (legacy support) */
-.tg{background:#4a7cfa}
+.tg{background:#5a7abe}
 .tg[style*="f09a4a"]{background:#f09a4a}
 .tg[style*="4ad4a0"]{background:#4ad4a0}
 .tg[style*="b07ad4"]{background:#b07ad4}
@@ -131,8 +131,8 @@ body{
 <a href="/code" class="{% if '/code' in request.path %}act{% endif %}">代码</a>
 <a href="/materials" class="{% if '/materials' in request.path %}act{% endif %}">资料</a>
 <a href="/wrong" class="{% if '/wrong' in request.path %}act{% endif %}">错题</a>
-{% if session.get('user') %}
-<span style="font-size:.72rem;color:rgba(255,255,255,.35)">{{ session.user.username }}</span>
+{% if current_user %}
+<span style="font-size:.72rem;color:rgba(255,255,255,.35)">{{ current_user.username }}</span>
 <a href="/logout">退出</a>
 {% else %}<a href="/login">登录</a>{% endif %}
 </div></div></div>
@@ -202,7 +202,7 @@ body{
       // Draw
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-      ctx.fillStyle = 'rgba(74,124,250,' + (0.3 + p.r/6) + ')';
+      ctx.fillStyle = 'rgba(200,210,235,' + (0.3 + p.r/6) + ')';
       ctx.fill();
       // Lines between nearby particles
       for(var j=i+1; j<particles.length; j++){
@@ -214,7 +214,7 @@ body{
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);
           ctx.lineTo(p2.x, p2.y);
-          ctx.strokeStyle = 'rgba(74,124,250,' + (0.06 * (1 - dist/120)) + ')';
+          ctx.strokeStyle = 'rgba(200,210,235,' + (0.06 * (1 - dist/120)) + ')';
           ctx.stroke();
         }
       }

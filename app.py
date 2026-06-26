@@ -4,6 +4,10 @@ from flask import Flask, request, render_template, redirect, url_for, session
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24).hex()
+
+@app.context_processor
+def inject_user():
+    return dict(current_user=get_user())
 DB = os.path.join(os.path.dirname(__file__), 'data.json')
 
 def load():
