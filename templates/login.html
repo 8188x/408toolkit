@@ -4,11 +4,11 @@
 <div class="cd">
   <div class="ct">用户登录</div>
   <form method="post" action="/login">
-    <div style="margin-bottom:14px"><label style="font-size:.78rem;color:rgba(255,255,255,.5);display:block;margin-bottom:4px">用户名</label><input name="username" style="width:100%;padding:8px 12px;border:1px solid rgba(74,124,250,.15);border-radius:6px;font-size:.85rem"></div>
-    <div style="margin-bottom:14px"><label style="font-size:.78rem;color:rgba(255,255,255,.5);display:block;margin-bottom:4px">密码</label><input name="password" type="password" style="width:100%;padding:8px 12px;border:1px solid rgba(74,124,250,.15);border-radius:6px;font-size:.85rem"></div>
+    <div style="margin-bottom:14px"><label style="font-size:.78rem;color:rgba(255,255,255,.5);display:block;margin-bottom:4px">用户名</label><input name="username" style="width:100%;padding:10px 12px;border:1px solid rgba(74,124,250,.12);border-radius:6px;font-size:.85rem;background:rgba(11,14,23,.5);color:#dce0f0;outline:none"></div>
+    <div style="margin-bottom:14px"><label style="font-size:.78rem;color:rgba(255,255,255,.5);display:block;margin-bottom:4px">密码</label><input name="password" type="password" style="width:100%;padding:10px 12px;border:1px solid rgba(74,124,250,.12);border-radius:6px;font-size:.85rem;background:rgba(11,14,23,.5);color:#dce0f0;outline:none"></div>
     {% if error %}<div style="color:#e05050;font-size:.78rem;margin-bottom:10px">{{ error }}</div>{% endif %}
     <button class="btn btn-p" style="width:100%;padding:10px;font-size:.85rem">登录</button>
   </form>
-  <div style="margin-top:12px;text-align:center;font-size:.78rem;color:rgba(255,255,255,.35)">没有账号？<a href="/register" style="color:#2c3e7a">注册</a></div>
+  <div style="margin-top:12px;text-align:center;font-size:.78rem;color:rgba(255,255,255,.35)">没有账号？<a href="/register" style="color:#5a8aff">注册</a></div>
 </div></div>
 {% endblock %}

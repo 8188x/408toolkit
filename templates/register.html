@@ -4,15 +4,15 @@
 <div class="cd">
   <div class="ct">用户注册</div>
   <form method="post" action="/register">
-    <div style="margin-bottom:12px"><label style="font-size:.78rem;color:rgba(255,255,255,.5);display:block;margin-bottom:4px">用户名 *</label><input name="username" style="width:100%;padding:8px 12px;border:1px solid rgba(74,124,250,.15);border-radius:6px;font-size:.85rem" required></div>
-    <div style="margin-bottom:12px"><label style="font-size:.78rem;color:rgba(255,255,255,.5);display:block;margin-bottom:4px">邮箱 (找回密码用)</label><input name="email" type="email" style="width:100%;padding:8px 12px;border:1px solid rgba(74,124,250,.15);border-radius:6px;font-size:.85rem"></div>
-    <div style="margin-bottom:12px"><label style="font-size:.78rem;color:rgba(255,255,255,.5);display:block;margin-bottom:4px">手机号 (选填)</label><input name="phone" style="width:100%;padding:8px 12px;border:1px solid rgba(74,124,250,.15);border-radius:6px;font-size:.85rem"></div>
-    <div style="margin-bottom:12px"><label style="font-size:.78rem;color:rgba(255,255,255,.5);display:block;margin-bottom:4px">密码 *</label><input name="password" type="password" style="width:100%;padding:8px 12px;border:1px solid rgba(74,124,250,.15);border-radius:6px;font-size:.85rem" required></div>
+    <div style="margin-bottom:12px"><label style="font-size:.78rem;color:rgba(255,255,255,.5);display:block;margin-bottom:4px">用户名 *</label><input name="username" style="width:100%;padding:10px 12px;border:1px solid rgba(74,124,250,.12);border-radius:6px;font-size:.85rem;background:rgba(11,14,23,.5);color:#dce0f0;outline:none" required></div>
+    <div style="margin-bottom:12px"><label style="font-size:.78rem;color:rgba(255,255,255,.5);display:block;margin-bottom:4px">邮箱 (找回密码用)</label><input name="email" type="email" style="width:100%;padding:10px 12px;border:1px solid rgba(74,124,250,.12);border-radius:6px;font-size:.85rem;background:rgba(11,14,23,.5);color:#dce0f0;outline:none"></div>
+    <div style="margin-bottom:12px"><label style="font-size:.78rem;color:rgba(255,255,255,.5);display:block;margin-bottom:4px">手机号 (选填)</label><input name="phone" style="width:100%;padding:10px 12px;border:1px solid rgba(74,124,250,.12);border-radius:6px;font-size:.85rem;background:rgba(11,14,23,.5);color:#dce0f0;outline:none"></div>
+    <div style="margin-bottom:12px"><label style="font-size:.78rem;color:rgba(255,255,255,.5);display:block;margin-bottom:4px">密码 *</label><input name="password" type="password" style="width:100%;padding:10px 12px;border:1px solid rgba(74,124,250,.12);border-radius:6px;font-size:.85rem;background:rgba(11,14,23,.5);color:#dce0f0;outline:none" required></div>
     {% if error %}<div style="color:#e05050;font-size:.78rem;margin-bottom:10px">{{ error }}</div>{% endif %}
     <button class="btn btn-p" style="width:100%;padding:10px;font-size:.85rem">注册</button>
   </form>
   <div style="margin-top:12px;text-align:center;font-size:.78rem;color:rgba(255,255,255,.35)">
-    <a href="/login" style="color:#2c3e7a">已有账号？登录</a> · <a href="/forgot" style="color:#2c3e7a">忘记密码？</a>
+    <a href="/login" style="color:#5a8aff">已有账号？登录</a> · <a href="/forgot" style="color:#5a8aff">忘记密码？</a>
   </div>
 </div></div>
 {% endblock %}
