@@ -1,34 +1,54 @@
 {% extends "base.html" %}
-{% block title %}408Toolkit{% endblock %}
+{% block title %}408Toolkit - 粒子树启动动画{% endblock %}
 {% block head %}
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;min-height:100vh;overflow-x:hidden;background:#06080f}
-#splash{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;background:#06080f;display:flex;align-items:center;justify-content:center}
+html,body{width:100%;height:100%;min-height:100vh;overflow-x:hidden;background:#05080f;color:#d0d8f0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+#splash{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;background:#05080f}
 #splash canvas{display:block;width:100%;height:100%}
+.mn{opacity:0;transition:opacity 1.8s ease .3s;position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
 body.loaded #splash{animation:splashFade 1.8s cubic-bezier(.4,0,.2,1) forwards;pointer-events:none}
 @keyframes splashFade{0%{opacity:1}100%{opacity:0;visibility:hidden;z-index:-1}}
-.mn{opacity:0;transition:opacity 1.5s ease .6s;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
 body.loaded .mn{opacity:1}
-.hero{text-align:center;padding:80px 20px 50px;max-width:800px;margin:0 auto}
-.hero h1{font-size:2.8rem;font-weight:200;letter-spacing:6px;color:#e0e4f0;margin-bottom:16px}
-.hero p{font-size:1rem;color:rgba(255,255,255,.3);letter-spacing:2px;line-height:1.8}
-.divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,rgba(200,210,240,.3),transparent);margin:0 auto 24px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;max-width:960px;margin:50px auto 0;padding:0 10px}
-.card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:32px 24px;text-decoration:none;color:inherit;transition:all .3s}
-.card:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);transform:translateY(-4px)}
-.card .ico{font-size:1.8rem;display:block;margin-bottom:10px}
-.card h3{font-size:1rem;font-weight:500;letter-spacing:1px;margin-bottom:6px;color:#d0d8f0}
-.card p{font-size:.78rem;line-height:1.6;color:rgba(255,255,255,.28)}
-.card .tag{display:inline-block;margin-top:12px;font-size:.68rem;color:rgba(255,255,255,.2);letter-spacing:1px}
-.stats{display:flex;justify-content:center;gap:50px;margin-top:60px;flex-wrap:wrap;padding-bottom:60px}
+.hero{text-align:center;padding:60px 20px 40px;max-width:800px;width:100%;margin:0 auto}
+.hero h1{font-size:clamp(2rem,6vw,3.5rem);font-weight:200;letter-spacing:8px;color:#e0e6ff;margin-bottom:12px;text-shadow:0 0 40px rgba(160,190,255,.15)}
+.hero p{font-size:.92rem;color:rgba(200,210,240,.35);letter-spacing:3px;line-height:1.8}
+.divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,rgba(180,200,240,.3),transparent);margin:0 auto 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;max-width:900px;width:100%;margin:40px auto 0;padding:0 10px}
+.card{background:rgba(255,255,255,.025);border:1px solid rgba(180,200,240,.07);border-radius:8px;padding:28px 20px;text-decoration:none;color:inherit;transition:all .35s ease;backdrop-filter:blur(2px)}
+.card:hover{background:rgba(255,255,255,.06);border-color:rgba(180,200,240,.15);transform:translateY(-3px);box-shadow:0 6px 30px rgba(100,140,255,.06)}
+.card .ico{font-size:1.6rem;display:block;margin-bottom:8px}
+.card h3{font-size:.95rem;font-weight:500;letter-spacing:1px;margin-bottom:5px;color:#c8d4f0}
+.card p{font-size:.74rem;line-height:1.6;color:rgba(200,210,240,.28)}
+.card .tag{display:inline-block;margin-top:10px;font-size:.65rem;color:rgba(200,210,240,.22);letter-spacing:1px}
+.stats{display:flex;justify-content:center;gap:40px;margin-top:50px;flex-wrap:wrap;padding-bottom:40px}
 .stat{text-align:center}
-.stat .num{font-size:2.2rem;font-weight:200;letter-spacing:2px;color:#d0d8f0}
-.stat .lbl{font-size:.72rem;color:rgba(255,255,255,.2);letter-spacing:2px;margin-top:4px}
+.stat .num{font-size:2rem;font-weight:200;letter-spacing:2px;color:#c8d4f0;text-shadow:0 0 20px rgba(160,190,255,.08)}
+.stat .lbl{font-size:.7rem;color:rgba(200,210,240,.2);letter-spacing:2px;margin-top:3px}
+.hd{position:fixed;top:0;left:0;right:0;z-index:2;background:rgba(5,8,15,.7);backdrop-filter:blur(15px);border-bottom:1px solid rgba(180,200,240,.06);padding:0 20px;opacity:0;transition:opacity .8s ease}
+body.loaded .hd{opacity:1}
+.hi{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:50px}
+.lg{font-size:1.05rem;font-weight:700;text-decoration:none;color:#fff;letter-spacing:-.5px}
+.lg em{font-style:normal;color:#5a7abe;text-shadow:0 0 18px rgba(120,160,255,.2)}
+.nv{display:flex;gap:1px;align-items:center}
+.nv a{display:inline-block;padding:5px 12px;border-radius:5px;text-decoration:none;color:rgba(255,255,255,.55);font-size:.73rem;font-weight:500;transition:all .2s}
+.nv a:hover{color:#fff;background:rgba(255,255,255,.04)}
+.ft{text-align:center;padding:16px;font-size:.68rem;color:rgba(200,210,240,.2);opacity:0;transition:opacity .8s ease}
+body.loaded .ft{opacity:1}
 </style>
 {% endblock %}
 {% block content %}
 <div id="splash"></div>
+<div class="hd"><div class="hi">
+<a href="/" class="lg"><em>408</em>Toolkit</a>
+<div class="nv">
+<a href="/questions">题库</a>
+<a href="/quiz">刷题</a>
+<a href="/code">代码</a>
+<a href="/materials">资料</a>
+{% if current_user %}<a href="/logout">退出</a>{% endif %}
+</div></div></div>
+
 <div class="mn">
   <div class="hero">
     <h1>408Toolkit</h1>
@@ -36,10 +56,10 @@ body.loaded .mn{opacity:1}
     <p>计算机统考 · 全科目复习平台</p>
   </div>
   <div class="grid">
-    <a href="/questions" class="card"><span class="ico">📝</span><h3>题库 · 302题</h3><p>四门课全部核心考点</p><span class="tag">立即刷题</span></a>
-    <a href="/quiz" class="card"><span class="ico">🎯</span><h3>刷题模式</h3><p>随机出题 · 即时判对错</p><span class="tag">开始挑战</span></a>
-    <a href="/code" class="card"><span class="ico">💻</span><h3>算法代码 · 107个</h3><p>排序 · 树 · 图 · 手写实现</p><span class="tag">查看代码</span></a>
-    <a href="/materials" class="card"><span class="ico">📖</span><h3>复习资料</h3><p>核心知识点系统总结</p><span class="tag">开始学习</span></a>
+    <a href="/questions" class="card"><span class="ico">📝</span><h3>题库 · 302题</h3><p>四门课全部核心考点</p><span class="tag">立即刷题 →</span></a>
+    <a href="/quiz" class="card"><span class="ico">🎯</span><h3>刷题模式</h3><p>随机出题 · 即时判对错</p><span class="tag">开始挑战 →</span></a>
+    <a href="/code" class="card"><span class="ico">💻</span><h3>算法代码 · 107个</h3><p>排序 · 树 · 图 · 手写实现</p><span class="tag">查看代码 →</span></a>
+    <a href="/materials" class="card"><span class="ico">📖</span><h3>复习资料</h3><p>核心知识点系统总结</p><span class="tag">开始学习 →</span></a>
   </div>
   <div class="stats">
     <div class="stat"><div class="num">302</div><div class="lbl">总题数</div></div>
@@ -47,266 +67,233 @@ body.loaded .mn{opacity:1}
     <div class="stat"><div class="num">4</div><div class="lbl">覆盖科目</div></div>
   </div>
 </div>
+<div class="ft">408Toolkit · 计算机考研 · 开源</div>
 <script src="/static/three.min.js"></script>
 <script>
 (function(){
   var W = window.innerWidth, H = window.innerHeight;
-  var el = document.getElementById('splash');
+  var el = document.getElementById("splash");
   var scene = new THREE.Scene();
   var camera = new THREE.PerspectiveCamera(45, W/H, 0.1, 200);
   var renderer = new THREE.WebGLRenderer({antialias: true, alpha: false});
   renderer.setSize(W, H);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setClearColor(0x06080f, 1);
+  renderer.setClearColor(0x05080f, 1);
   el.appendChild(renderer.domElement);
 
-    // ---- Glow texture (silver-white with blue halo) ----
-  var cv = document.createElement('canvas'); cv.width = 64; cv.height = 64;
-  var ctx = cv.getContext('2d');
+  // Glow texture: silver-white with icy blue halo
+  var cv = document.createElement("canvas"); cv.width = 64; cv.height = 64;
+  var ctx = cv.getContext("2d");
   var grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-  grad.addColorStop(0, 'rgba(255,255,255,1)');
-  grad.addColorStop(0.05, 'rgba(220,230,255,0.92)');
-  grad.addColorStop(0.15, 'rgba(180,200,240,0.55)');
-  grad.addColorStop(0.3, 'rgba(140,170,220,0.2)');
-  grad.addColorStop(0.5, 'rgba(90,120,180,0.06)');
-  grad.addColorStop(1, 'rgba(50,70,140,0)');
+  grad.addColorStop(0, "rgba(255,255,255,1)");
+  grad.addColorStop(0.04, "rgba(230,240,255,0.95)");
+  grad.addColorStop(0.12, "rgba(190,210,240,0.6)");
+  grad.addColorStop(0.25, "rgba(150,180,220,0.25)");
+  grad.addColorStop(0.45, "rgba(90,130,200,0.08)");
+  grad.addColorStop(1, "rgba(40,70,150,0)");
   ctx.fillStyle = grad; ctx.fillRect(0, 0, 64, 64);
   var glowTex = new THREE.CanvasTexture(cv);
 
-  // ---- Silver-blue color palette ----
+  // Silver-ice color palette
   var pts = [], C = THREE.Color;
-  var colTrunk = new C(0x687898), colTrunkHi = new C(0x8090b0);
-  var colBranch = new C(0x8098b8), colBranchHi = new C(0x98b0d0);
-  var colTwig = new C(0x98b0d0), colTwigHi = new C(0xb8d0e8);
-  var colLeaf = new C(0xc8ddef), colLeafHi = new C(0xe0eeff);
+  var colTrunk = new C(0.45,0.5,0.6), colTrunkHi = new C(0.55,0.6,0.7);
+  var colBranch = new C(0.55,0.62,0.72), colBranchHi = new C(0.65,0.72,0.82);
+  var colTwig = new C(0.65,0.72,0.82), colTwigHi = new C(0.75,0.82,0.9);
+  var colLeaf = new C(0.8,0.86,0.94), colLeafHi = new C(0.9,0.93,0.98);
+  var colGlow = new C(0.85,0.9,1), colGlowHi = new C(0.95,0.97,1);
 
-  // ---- Recursive branch generation ----
-  function genBranch(x1, y1, z1, angle, elev, len, thick, depth, spread, cLo, cHi, sMin, sMax, cnt, wave) {
-    var endX = x1 + Math.sin(angle) * Math.cos(elev) * len;
-    var endY = y1 + Math.sin(elev) * len;
-    var endZ = z1 + Math.cos(angle) * Math.cos(elev) * len;
-
-    var dx = endX - x1, dy = endY - y1, dz = endZ - z1;
-    for (var i = 0; i < cnt; i++) {
-      var t = i / cnt;
-      var wiggle = Math.sin(t * 4.2 + angle * 2) * wave + Math.cos(t * 3.1 + elev * 1.5) * wave * 0.5;
-      var px = x1 + dx * t + (Math.random()-0.5) * spread * (1 - t * 0.5) + wiggle;
-      var py = y1 + dy * t + (Math.random()-0.5) * spread * (1 - t * 0.5);
-      var pz = z1 + dz * t + (Math.random()-0.5) * spread * (1 - t * 0.5) + wiggle * 0.7;
-      var cl = new C().lerpColors(cLo, cHi, Math.random() * 0.5 + 0.1);
-      var sz = sMin + Math.random() * (sMax - sMin);
-      pts.push({x:px, y:py, z:pz, r:cl.r, g:cl.g, b:cl.b, s:sz});
+  // Recursive branch generation
+  function genBranch(x1,y1,z1,angle,elev,len,thick,depth,spread,cLo,cHi,sMin,sMax,cnt,wave){
+    var endX=x1+Math.sin(angle)*Math.cos(elev)*len;
+    var endY=y1+Math.sin(elev)*len;
+    var endZ=z1+Math.cos(angle)*Math.cos(elev)*len;
+    var dx=endX-x1,dy=endY-y1,dz=endZ-z1;
+    for(var i=0;i<cnt;i++){
+      var t=i/cnt;
+      var wiggle=Math.sin(t*4.2+angle*2)*wave+Math.cos(t*3.1+elev*1.5)*wave*0.5;
+      var px=x1+dx*t+(Math.random()-0.5)*spread*(1-t*0.5)+wiggle;
+      var py=y1+dy*t+(Math.random()-0.5)*spread*(1-t*0.5);
+      var pz=z1+dz*t+(Math.random()-0.5)*spread*(1-t*0.5)+wiggle*0.7;
+      var cl=new C().lerpColors(cLo,cHi,Math.random()*0.5+0.1);
+      var sz=sMin+Math.random()*(sMax-sMin);
+      pts.push({x:px,y:py,z:pz,r:cl.r,g:cl.g,b:cl.b,s:sz});
     }
-
-    if (depth > 0) {
-      var subCnt = 2 + Math.floor(Math.random() * (depth > 1 ? 2 : 1));
-      var branchPoint = 0.5 + Math.random() * 0.3;
-      var splitX = x1 + dx * branchPoint;
-      var splitY = y1 + dy * branchPoint;
-      var splitZ = z1 + dz * branchPoint;
-
-      for (var s = 0; s < subCnt; s++) {
-        var newAngle = angle + (s - (subCnt-1)*0.5) * 0.9 + (Math.random()-0.5) * 0.3;
-        var newElev = elev + 0.15 + Math.random() * 0.35;
-        var newLen = len * (0.45 + Math.random() * 0.3);
-        var newSp = spread * 0.55;
-        var newCnt = Math.floor(cnt * (0.35 + Math.random() * 0.15));
-        var newWave = wave * 0.45;
-        var newSMin = sMin * 0.7, newSMax = sMax * 0.7;
-        var newD = depth - 1;
-
-        var nLo, nHi;
-        if (newD >= 3) { nLo = colTrunk; nHi = colTrunkHi; }
-        else if (newD >= 2) { nLo = colBranch; nHi = colBranchHi; }
-        else if (newD >= 1) { nLo = colTwig; nHi = colTwigHi; }
-        else { nLo = colLeaf; nHi = colLeafHi; }
-
-        genBranch(splitX, splitY, splitZ, newAngle, newElev, newLen, thick * 0.55, newD, newSp, nLo, nHi, newSMin, newSMax, newCnt, newWave);
+    if(depth>0){
+      var subCnt=2+Math.floor(Math.random()*(depth>1?2:1));
+      var branchPoint=0.45+Math.random()*0.35;
+      var splitX=x1+dx*branchPoint;
+      var splitY=y1+dy*branchPoint;
+      var splitZ=z1+dz*branchPoint;
+      for(var s=0;s<subCnt;s++){
+        var newAngle=angle+(s-(subCnt-1)*0.5)*0.85+(Math.random()-0.5)*0.3;
+        var newElev=elev+(0.12+Math.random()*0.3);
+        var newLen=len*(0.4+Math.random()*0.3);
+        var newSp=spread*0.55;
+        var newCnt=Math.floor(cnt*(0.3+Math.random()*0.15));
+        var newWave=wave*0.45;
+        var newSMin=sMin*0.7,newSMax=sMax*0.7;
+        var newD=depth-1;
+        var nLo,nHi;
+        if(newD>=3){nLo=colTrunk;nHi=colTrunkHi}
+        else if(newD>=2){nLo=colBranch;nHi=colBranchHi}
+        else if(newD>=1){nLo=colTwig;nHi=colTwigHi}
+        else{nLo=colLeaf;nHi=colLeafHi}
+        genBranch(splitX,splitY,splitZ,newAngle,newElev,newLen,thick*0.55,newD,newSp,nLo,nHi,newSMin,newSMax,newCnt,newWave);
       }
     }
   }
 
-  // ---- Generate the tree ----
-  // Trunk: thick, straight vertical
-  genBranch(0, -4.5, 0, 0, Math.PI/2, 4.0, 1.0, 4, 0.18,
-    colTrunk, colTrunkHi, 0.25, 0.6, 1800, 0.08);
-
-  // Main branches radiating outward at various heights
-  var mainBranches = [
-    {height: -2.5, angle: 0.0,   elev: Math.PI/3.8, len: 3.8},
-    {height: -2.0, angle: 0.7,   elev: Math.PI/3.2, len: 4.2},
-    {height: -2.0, angle: 2.8,   elev: Math.PI/3.5, len: 4.0},
-    {height: -1.5, angle: 1.4,   elev: Math.PI/3.0, len: 4.5},
-    {height: -1.5, angle: 4.0,   elev: Math.PI/3.3, len: 4.2},
-    {height: -1.0, angle: 2.0,   elev: Math.PI/3.5, len: 3.8},
-    {height: -1.0, angle: 5.0,   elev: Math.PI/3.8, len: 3.5},
-    {height: -0.5, angle: 1.0,   elev: Math.PI/2.8, len: 4.0},
-    {height: -0.5, angle: 3.5,   elev: Math.PI/3.0, len: 4.2},
-    {height: -0.5, angle: 5.5,   elev: Math.PI/3.5, len: 3.5},
-    {height:  0.0, angle: 2.5,   elev: Math.PI/3.2, len: 3.8},
-    {height:  0.0, angle: 4.5,   elev: Math.PI/3.5, len: 3.5},
-    {height:  0.5, angle: 0.5,   elev: Math.PI/2.6, len: 3.5},
-    {height:  0.5, angle: 3.0,   elev: Math.PI/2.8, len: 3.8},
-    {height:  1.0, angle: 1.8,   elev: Math.PI/2.5, len: 3.0},
-    {height:  1.0, angle: 4.8,   elev: Math.PI/2.7, len: 3.2},
+  // Trunk
+  genBranch(0,-4.8,0,0,Math.PI/2,4.2,1,4,0.15,colTrunk,colTrunkHi,0.2,0.5,2000,0.06);
+  // Main branches
+  var mainBranches=[
+    {h:-2.8,a:0,e:Math.PI/3.5,l:4.2},{h:-2.3,a:.65,e:Math.PI/3,l:4.5},
+    {h:-2.3,a:2.7,e:Math.PI/3.2,l:4.3},{h:-1.8,a:1.3,e:Math.PI/2.9,l:4.8},
+    {h:-1.8,a:3.8,e:Math.PI/3.1,l:4.6},{h:-1.3,a:1.9,e:Math.PI/3,l:4.4},
+    {h:-1.3,a:4.8,e:Math.PI/3.3,l:4.2},{h:-.8,a:.9,e:Math.PI/2.7,l:4.5},
+    {h:-.8,a:3.3,e:Math.PI/2.9,l:4.5},{h:-.8,a:5.3,e:Math.PI/3.2,l:4},
+    {h:-.3,a:2.4,e:Math.PI/2.8,l:4.2},{h:-.3,a:4.3,e:Math.PI/3,l:4},
+    {h:.2,a:.4,e:Math.PI/2.5,l:4},{h:.2,a:2.9,e:Math.PI/2.6,l:4.2},
+    {h:.7,a:1.6,e:Math.PI/2.4,l:3.6},{h:.7,a:4.5,e:Math.PI/2.6,l:3.8},
+    {h:1.2,a:0,e:Math.PI/2.3,l:3.2},{h:1.2,a:3.1,e:Math.PI/2.5,l:3.5},
+    {h:1.7,a:2.2,e:Math.PI/2.2,l:2.8},{h:1.7,a:5,e:Math.PI/2.4,l:3}
   ];
-
-  for (var b = 0; b < mainBranches.length; b++) {
-    var mb = mainBranches[b];
-    genBranch(0, mb.height, 0, mb.angle, mb.elev, mb.len, 0.6, 3, 0.12,
-      colBranch, colBranchHi, 0.12, 0.28, 550, 0.07);
+  for(var b=0;b<mainBranches.length;b++){
+    var mb=mainBranches[b];
+    genBranch(0,mb.h,0,mb.a,mb.e,mb.l,0.55,3,0.1,colBranch,colBranchHi,0.1,0.24,650,0.05);
   }
 
-  // Fill in canopy with scattered silver particles
-  for (var i = 0; i < 5000; i++) {
-    var theta = Math.random() * Math.PI * 2;
-    var r = 0.8 + Math.random() * 4.5;
-    var h = 0.5 + Math.random() * 4.5;
-    var dens = Math.exp(-Math.pow(h-2.5,2)/3.5 - Math.pow(r-2.2,2)/4);
-    if (Math.random() > dens * 1.3 && r > 1.0) continue;
-    var px = Math.sin(theta) * r * (0.6 + Math.random() * 0.4);
-    var py = h;
-    var pz = Math.cos(theta) * r * (0.6 + Math.random() * 0.4);
-    var t = Math.random();
-    var cl = new C().lerpColors(colTwig, colLeafHi, t);
-    pts.push({x:px, y:py, z:pz, r:cl.r, g:cl.g, b:cl.b, s:0.03 + Math.random() * 0.10});
+  // Canopy fill
+  for(var i=0;i<6000;i++){
+    var theta=Math.random()*Math.PI*2;
+    var r=0.6+Math.random()*5;
+    var h3=-0.5+Math.random()*5.5;
+    var dens=Math.exp(-Math.pow(h3-2.2,2)/4-Math.pow(r-2.5,2)/5);
+    if(Math.random()>dens*1.5&&r>1)continue;
+    var px=Math.sin(theta)*r*(0.55+Math.random()*0.45);
+    var py=h3;
+    var pz=Math.cos(theta)*r*(0.55+Math.random()*0.45);
+    var t=Math.random();var cl=new C().lerpColors(colLeaf,colGlowHi,t);
+    pts.push({x:px,y:py,z:pz,r:cl.r,g:cl.g,b:cl.b,s:0.02+Math.random()*0.12});
   }
 
-  console.log("Tree particles:", pts.length);
-
-  // ---- Build BufferGeometry ----
-  var totalCount = pts.length;
-  var pos = new Float32Array(totalCount * 3);
-  var colArr = new Float32Array(totalCount * 3);
-  var sizeArr = new Float32Array(totalCount);
-  for (var j = 0; j < totalCount; j++) {
-    var p = pts[j];
-    pos[j*3] = p.x; pos[j*3+1] = p.y; pos[j*3+2] = p.z;
-    colArr[j*3] = p.r; colArr[j*3+1] = p.g; colArr[j*3+2] = p.b;
-    sizeArr[j] = p.s;
+  // Extra glow particles around canopy
+  for(var i=0;i<1500;i++){
+    var theta=Math.random()*Math.PI*2;
+    var r=1.5+Math.random()*4.5;
+    var h3=-0.2+Math.random()*4.8;
+    var cl=new C().lerpColors(colGlow,colGlowHi,Math.random());
+    var px=Math.sin(theta)*r*(0.5+Math.random()*0.5);
+    var py=h3;
+    var pz=Math.cos(theta)*r*(0.5+Math.random()*0.5);
+    pts.push({x:px,y:py,z:pz,r:cl.r,g:cl.g,b:cl.b,s:0.01+Math.random()*0.06});
   }
-  var geom = new THREE.BufferGeometry();
-  geom.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  geom.setAttribute('color', new THREE.BufferAttribute(colArr, 3));
-  geom.setAttribute('size', new THREE.BufferAttribute(sizeArr, 1));
 
-  // ---- Custom Shader Material with turbulence ----
-  var vertexShader = [
-    'attribute float size;',
-    'attribute vec3 color;',
-    'varying vec3 vColor;',
-    'uniform float uTime;',
-    'uniform float uProgress;',
-    'void main() {',
-    '  vColor = color;',
-    '  vec3 pos = position;',
-    '  float n = sin(pos.x * 3.7 + pos.y * 2.3 + pos.z * 5.1 + uTime * 0.4) * 0.03;',
-    '  n += sin(pos.y * 4.1 + pos.z * 1.7 + pos.x * 3.3 + uTime * 0.25) * 0.02;',
-    '  pos.x += n; pos.y += n * 0.5; pos.z += n;',
-    '  float scale = uProgress;',
-    '  pos *= scale;',
-    '  vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);',
-    '  gl_PointSize = size * (200.0 / -mvPosition.z) * (0.8 + 0.2 * uProgress);',
-    '  gl_Position = projectionMatrix * mvPosition;',
-    '}'
-  ].join('\n');
-  var fragmentShader = [
-    'uniform sampler2D uTexture;',
-    'varying vec3 vColor;',
-    'void main() {',
-    '  vec4 tex = texture2D(uTexture, gl_PointCoord);',
-    '  gl_FragColor = vec4(vColor, tex.a * 0.9);',
-    '}'
-  ].join('\n');
+  console.log("Particles:",pts.length);
+  var totalCount=pts.length;
+  var pos=new Float32Array(totalCount*3);
+  var colArr=new Float32Array(totalCount*3);
+  var sizeArr=new Float32Array(totalCount);
+  for(var j=0;j<totalCount;j++){
+    var p=pts[j];
+    pos[j*3]=p.x;pos[j*3+1]=p.y;pos[j*3+2]=p.z;
+    colArr[j*3]=p.r;colArr[j*3+1]=p.g;colArr[j*3+2]=p.b;
+    sizeArr[j]=p.s;
+  }
+  var geom=new THREE.BufferGeometry();
+  geom.setAttribute("position",new THREE.BufferAttribute(pos,3));
+  geom.setAttribute("color",new THREE.BufferAttribute(colArr,3));
+  geom.setAttribute("size",new THREE.BufferAttribute(sizeArr,1));
 
-  var mat = new THREE.ShaderMaterial({
-    uniforms: {
-      uTime: {value: 0},
-      uProgress: {value: 0},
-      uTexture: {value: glowTex}
-    },
-    vertexShader: vertexShader,
-    fragmentShader: fragmentShader,
-    transparent: true,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending
+  // Shader: fade in size, keep positions fixed
+  var vertexShader=[
+    "attribute float size;",
+    "attribute vec3 color;",
+    "varying vec3 vColor;",
+    "uniform float uTime;",
+    "uniform float uProgress;",
+    "void main(){",
+    "  vColor=color;",
+    "  vec3 p=position;",
+    "  float n=sin(p.x*3.7+p.y*2.3+p.z*5.1+uTime*0.35)*0.025;",
+    "  n+=sin(p.y*4.1+p.z*1.7+p.x*3.3+uTime*0.22)*0.018;",
+    "  p.x+=n;p.y+=n*0.5;p.z+=n;",
+    "  vec4 mvPosition=modelViewMatrix*vec4(p,1.0);",
+    "  float fade=min(uProgress*1.8,1.0);",
+    "  gl_PointSize=size*(200.0/-mvPosition.z)*fade;",
+    "  gl_Position=projectionMatrix*mvPosition;",
+    "}"
+  ].join("\n");
+  var fragmentShader=[
+    "uniform sampler2D uTexture;",
+    "varying vec3 vColor;",
+    "void main(){",
+    "  vec4 tex=texture2D(uTexture,gl_PointCoord);",
+    "  gl_FragColor=vec4(vColor,tex.a*0.85);",
+    "}"
+  ].join("\n");
+
+  var mat=new THREE.ShaderMaterial({
+    uniforms:{uTime:{value:0},uProgress:{value:0},uTexture:{value:glowTex}},
+    vertexShader:vertexShader,fragmentShader:fragmentShader,
+    transparent:true,depthWrite:false,blending:THREE.AdditiveBlending
   });
 
-    // ---- Ground glow plane ----
-  var groundGeom = new THREE.PlaneGeometry(30, 2);
-  var groundMat = new THREE.ShaderMaterial({
-    uniforms: { uProgress: {value: 0} },
-    vertexShader: [
-      'varying vec2 vUv;',
-      'uniform float uProgress;',
-      'void main() {',
-      '  vUv = uv;',
-      '  vec3 p = position;',
-      '  p.y = -2.8 + (1.0 - uProgress) * 0.5;',
-      '  gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);',
-      '}'
-    ].join('\n'),
-    fragmentShader: [
-      'varying vec2 vUv;',
-      'uniform float uProgress;',
-      'void main() {',
-      '  float alpha = (1.0 - abs(vUv.x - 0.5) * 2.0) * uProgress * 0.4;',
-      '  alpha = max(0.0, alpha);',
-      '  gl_FragColor = vec4(0.5, 0.6, 0.9, alpha);',
-      '}'
-    ].join('\n'),
-    transparent: true,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending,
-    side: THREE.DoubleSide
+  // Ground glow plane
+  var groundGeom=new THREE.PlaneGeometry(30,2.5);
+  var groundMat=new THREE.ShaderMaterial({
+    uniforms:{uProgress:{value:0}},
+    vertexShader:[
+      "varying vec2 vUv;",
+      "uniform float uProgress;",
+      "void main(){",
+      "  vUv=uv;",
+      "  vec3 p=position;",
+      "  p.y=-2.8+(1.0-uProgress)*0.3;",
+      "  gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);",
+      "}"
+    ].join("\n"),
+    fragmentShader:[
+      "varying vec2 vUv;",
+      "uniform float uProgress;",
+      "void main(){",
+      "  float alpha=(1.0-abs(vUv.x-0.5)*2.0)*uProgress*0.35;",
+      "  alpha=max(0.0,alpha);",
+      "  gl_FragColor=vec4(0.45,0.55,0.8,alpha);",
+      "}"
+    ].join("\n"),
+    transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide
   });
-  var ground = new THREE.Mesh(groundGeom, groundMat);
-  ground.rotation.x = -Math.PI / 2;
-  ground.position.y = -2.8;
-  ground.rotation.x = -Math.PI / 2;
-  ground.position.y = -2.8;
+  var ground=new THREE.Mesh(groundGeom,groundMat);
+  ground.rotation.x=-Math.PI/2;ground.position.y=-2.8;
   scene.add(ground);
 
-  var points = new THREE.Points(geom, mat);
+  var points=new THREE.Points(geom,mat);
   scene.add(points);
 
-  // ---- Camera & animation ----
-  var startTime = Date.now(), DURATION = 12500;
-  var done = false;
-
-  function anim() {
-    var t = (Date.now() - startTime) / DURATION;
-    var p = Math.min(t, 1);
-    // Camera moves from overhead to front view
-    var angle = p * Math.PI * 0.5;
-    var camDist = 10 + (1 - p) * 4;
-    camera.position.set(
-      Math.sin(angle) * camDist * 0.7,
-      4 - p * 3,
-      Math.cos(angle) * camDist
-    );
-    camera.lookAt(0, 1, 0);
-
-    // Update shader uniforms
-    mat.uniforms.uTime.value = t * 8;
-    mat.uniforms.uProgress.value = Math.min(p * 1.5, 1);
-    groundMat.uniforms.uProgress.value = Math.min(p * 1.8, 1);
-
-    renderer.render(scene, camera);
-
-    if (t >= 1 && !done) {
-      done = true;
-      document.body.classList.add('loaded');
-    }
-    if (t < 1.2) requestAnimationFrame(anim);
+  // Animation
+  var startTime=Date.now(),DURATION=12500,done=false;
+  function anim(){
+    var t=(Date.now()-startTime)/DURATION;
+    var p=Math.min(t,1);
+    // Camera moves from top-down to front
+    var angle=p*Math.PI*0.48;
+    var camDist=9+(1-p)*3;
+    var camY=3.5-p*2.5;
+    camera.position.set(Math.sin(angle)*camDist*0.6,camY,Math.cos(angle)*camDist);
+    camera.lookAt(0,0.8,0);
+    mat.uniforms.uTime.value=t*6;
+    mat.uniforms.uProgress.value=Math.min(p*1.6,1);
+    groundMat.uniforms.uProgress.value=Math.min(p*2,1);
+    renderer.render(scene,camera);
+    if(t>=1&&!done){done=true;document.body.classList.add("loaded");}
+    if(t<1.2)requestAnimationFrame(anim);
   }
   anim();
 
-  window.addEventListener('resize', function() {
-    W = window.innerWidth; H = window.innerHeight;
-    renderer.setSize(W, H);
-    camera.aspect = W / H;
-    camera.updateProjectionMatrix();
+  window.addEventListener("resize",function(){
+    W=window.innerWidth;H=window.innerHeight;
+    renderer.setSize(W,H);camera.aspect=W/H;camera.updateProjectionMatrix();
   });
 })();
 </script>
